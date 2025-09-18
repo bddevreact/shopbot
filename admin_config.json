@@ -1,0 +1,15 @@
+{
+  "admin_users": [
+    {
+      "user_id": 7685364015,
+      "username": "admin",
+      "role": "super_admin",
+      "permissions": ["manage_categories", "manage_products", "view_orders", "manage_users", "edit_shop_info"]
+    }
+  ],
+  "bot_settings": {
+    "auto_reload_categories": true,
+    "backup_enabled": true,
+    "log_level": "INFO"
+  }
+}

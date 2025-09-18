@@ -1,0 +1,158 @@
+{
+  "orders": [
+    {
+      "order_id": "ORD000001",
+      "user_id": 6251161332,
+      "timestamp": "2025-09-18T04:42:21.493714",
+      "status": "processing",
+      "items": [
+        {
+          "name": "Mephedrone",
+          "price": 22.5
+        },
+        {
+          "name": "MDMA â˜… DUTCH CHAMPAGNE 84% • 5g",
+          "price": 45.0,
+          "amount": "5g",
+          "product_name": "MDMA â˜… DUTCH CHAMPAGNE 84%"
+        },
+        {
+          "name": "MDMA â˜… DUTCH CHAMPAGNE 84% • 100g",
+          "price": 500.0,
+          "amount": "100g",
+          "product_name": "MDMA â˜… DUTCH CHAMPAGNE 84%"
+        }
+      ],
+      "delivery_method": "eu_untracked",
+      "delivery_price": 0.0,
+      "payment_method": "btc",
+      "delivery_address": "https://privnote.com/mBr9jHbZ#Gpk755io1",
+      "total_amount": 567.5,
+      "crypto_amount": 0.008512500000000001,
+      "notes": "",
+      "tracking_number": ""
+    },
+    {
+      "order_id": "ORD000002",
+      "user_id": 6251161332,
+      "timestamp": "2025-09-18T05:30:38.890709",
+      "status": "cancelled",
+      "items": [
+        {
+          "name": "MDMA â˜… DUTCH CHAMPAGNE 84% • 5g",
+          "price": 45.0,
+          "amount": "5g",
+          "product_name": "MDMA â˜… DUTCH CHAMPAGNE 84%"
+        }
+      ],
+      "delivery_method": "eu_untracked",
+      "delivery_price": 0.0,
+      "payment_method": "btc",
+      "delivery_address": "https://privnote.com/mBr9jHbZ#Gpk755io1",
+      "total_amount": 45.0,
+      "crypto_amount": 0.000675,
+      "notes": "",
+      "tracking_number": ""
+    },
+    {
+      "order_id": "ORD000003",
+      "user_id": 6251161332,
+      "timestamp": "2025-09-18T05:31:49.030242",
+      "status": "pending",
+      "items": [
+        {
+          "name": "Methylone • 5g",
+          "price": 80.0,
+          "amount": "5g",
+          "product_name": "Methylone"
+        }
+      ],
+      "delivery_method": "eu_untracked",
+      "delivery_price": 0.0,
+      "payment_method": "xmr",
+      "delivery_address": "https://privnote.com/mBr9jHbZ#Gpk755io1",
+      "total_amount": 80.0,
+      "crypto_amount": 0.48,
+      "notes": "",
+      "tracking_number": ""
+    },
+    {
+      "order_id": "ORD000004",
+      "user_id": 6251161332,
+      "timestamp": "2025-09-18T06:08:39.026423",
+      "status": "pending",
+      "items": [],
+      "delivery_method": "unknown",
+      "delivery_price": 0,
+      "payment_method": "unknown",
+      "delivery_address": "",
+      "total_amount": 0,
+      "crypto_amount": 0.0,
+      "notes": "",
+      "tracking_number": ""
+    },
+    {
+      "order_id": "ORD000005",
+      "user_id": 8091375968,
+      "timestamp": "2025-09-18T19:57:24.173484",
+      "status": "pending",
+      "items": [
+        {
+          "name": "MDMA â˜… DUTCH CHAMPAGNE 84% • 50g",
+          "price": 300.0,
+          "amount": "50g",
+          "product_name": "MDMA â˜… DUTCH CHAMPAGNE 84%"
+        },
+        {
+          "name": "Ketamine Powder • 25g",
+          "price": 700.0,
+          "amount": "25g",
+          "product_name": "Ketamine Powder"
+        }
+      ],
+      "delivery_method": "eu_untracked",
+      "delivery_price": 0.0,
+      "payment_method": "btc",
+      "delivery_address": "Dfssgbgr",
+      "total_amount": 1000.0,
+      "crypto_amount": 0.015000000000000001,
+      "notes": "",
+      "tracking_number": ""
+    },
+    {
+      "order_id": "ORD000006",
+      "user_id": 6251161332,
+      "timestamp": "2025-09-18T23:58:57.373593",
+      "status": "pending",
+      "items": [
+        {
+          "name": "MDMA â˜… DUTCH CHAMPAGNE 84% • 3g",
+          "price": 30.0,
+          "amount": "3g",
+          "product_name": "MDMA â˜… DUTCH CHAMPAGNE 84%"
+        }
+      ],
+      "delivery_method": "unknown",
+      "delivery_price": 0,
+      "payment_method": "btc",
+      "delivery_address": "(YOUR NAME) - John Smith\n(STREET NAME + NUMBER) - Main St 123\n(CITY) - Berlin\n(POSTAL CODE) - 10115\n(COUNTRY) - GERMANY",
+      "total_amount": 30.0,
+      "crypto_amount": 0.00045,
+      "notes": "",
+      "tracking_number": ""
+    }
+  ],
+  "order_counter": 6,
+  "statistics": {
+    "total_orders": 6,
+    "total_sales": 1722.5,
+    "total_users": 0,
+    "orders_by_status": {
+      "pending": 4,
+      "processing": 1,
+      "shipped": 0,
+      "delivered": 0,
+      "cancelled": 1
+    }
+  }
+}
