@@ -1,14 +1,6 @@
-<<<<<<< HEAD
 pyTelegramBotAPI==4.14.0
 python-dotenv==1.0.0
 qrcode[pil]==7.4.2
 Pillow==10.1.0
 python-gnupg==0.5.0  # Optional: Requires GPG to be installed on system
 pathlib==1.0.1
-=======
-pyTelegramBotAPI==4.14.0
-python-dotenv==1.0.0
-qrcode[pil]==7.4.2
-Pillow==10.1.0
-python-gnupg==0.5.0  # Optional: Requires GPG to be installed on system
->>>>>>> 5f2a61601dd6311cc5b35154e8405aed0090abf1
