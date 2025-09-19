@@ -422,6 +422,58 @@ def generate_qr(data, filename):
     img.save(filename)
     return filename
 
+def create_user_dashboard(user_id, user_carts, shop_info):
+    """Create user dashboard menu"""
+    cart_total = sum(item['price'] for item in user_carts.get(user_id, []))
+    cart_items = len(user_carts.get(user_id, []))
+    
+    # Load user data
+    users_data = load_users()
+    user_data = None
+    for user in users_data.get('users', []):
+        if user['user_id'] == user_id:
+            user_data = user
+            break
+    
+    # Load orders
+    orders_data = load_orders()
+    user_orders = [order for order in orders_data.get('orders', []) if order['user_id'] == user_id]
+    total_orders = len(user_orders)
+    total_spent = sum(float(order['total_amount']) for order in user_orders)
+    
+    dashboard_text = f"""
+👤 **My Account Dashboard**
+
+**📊 Account Summary:**
+• Member Since: {user_data['join_date'][:10] if user_data else 'Unknown'}
+• Total Orders: {total_orders}
+• Total Spent: €{total_spent:.2f}
+• Current Cart: {cart_items} items (€{cart_total:.2f})
+
+**🎯 Quick Actions:**
+• View your order history
+• Manage your wishlist
+• Update preferences
+• Security settings
+    """.strip()
+    
+    markup = InlineKeyboardMarkup(row_width=2)
+    markup.add(
+        InlineKeyboardButton('📦 Order History', callback_data='order_history'),
+        InlineKeyboardButton('🎁 Wishlist', callback_data='wishlist')
+    )
+    markup.add(
+        InlineKeyboardButton('⚙️ Settings', callback_data='user_settings'),
+        InlineKeyboardButton('🛡️ Security', callback_data='security_settings')
+    )
+    markup.add(
+        InlineKeyboardButton('📊 Analytics', callback_data='user_analytics'),
+        InlineKeyboardButton('🎯 Preferences', callback_data='user_preferences')
+    )
+    markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+    
+    return dashboard_text, markup
+
 def setup_user_handlers(bot, categories, shop_info, user_carts, user_states, gpg, PUBLIC_KEY, PRIVATE_PASSPHRASE, BTC_ADDRESS, XMR_ADDRESS, admin_config):
     """Setup all user-related handlers"""
     
@@ -1385,6 +1437,166 @@ Just type your address in the format above and send it to this chat.
                 save_user_state(user_id, {})
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, "Order deleted. Starting fresh!", reply_markup=create_main_menu(user_id, user_carts, shop_info))
             bot.answer_callback_query(call.id, "Order deleted")
+        
+        # My Account features
+        elif call.data == 'user_dashboard':
+            dashboard_text, markup = create_user_dashboard(user_id, user_carts, shop_info)
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, dashboard_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'order_history':
+            # Load user orders
+            orders_data = load_orders()
+            user_orders = [order for order in orders_data.get('orders', []) if order['user_id'] == user_id]
+            
+            if not user_orders:
+                history_text = """
+📦 **Order History**
+
+You haven't placed any orders yet.
+
+Start shopping to see your order history here!
+                """.strip()
+            else:
+                history_text = f"📦 **Order History** ({len(user_orders)} orders)\n\n"
+                
+                # Show recent orders (last 5)
+                recent_orders = sorted(user_orders, key=lambda x: x['timestamp'], reverse=True)[:5]
+                
+                for order in recent_orders:
+                    status_emoji = {
+                        'pending': '⏳',
+                        'processing': '🔄',
+                        'shipped': '🚚',
+                        'delivered': '✅',
+                        'cancelled': '❌'
+                    }.get(order['status'], '❓')
+                    
+                    order_date = datetime.datetime.fromisoformat(order['timestamp']).strftime('%Y-%m-%d')
+                    history_text += f"{status_emoji} **Order #{order['order_id']}**\n"
+                    history_text += f"   Date: {order_date}\n"
+                    history_text += f"   Status: {order['status'].title()}\n"
+                    history_text += f"   Total: €{order['total_amount']:.2f}\n\n"
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Dashboard', callback_data='user_dashboard'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, history_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'user_settings':
+            settings_text = """
+⚙️ **Account Settings**
+
+**Available Settings:**
+• Notification preferences
+• Language settings
+• Privacy options
+• Display preferences
+• Account information
+
+**Coming Soon:**
+• Theme customization
+• Advanced preferences
+• Data export options
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔔 Notifications', callback_data='notification_settings'))
+            markup.add(InlineKeyboardButton('🌐 Language', callback_data='language_settings'))
+            markup.add(InlineKeyboardButton('🔙 Back to Dashboard', callback_data='user_dashboard'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, settings_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'security_settings':
+            security_text = """
+🛡️ **Security Settings**
+
+**Security Features:**
+• PGP Key verification
+• Two-factor authentication
+• Login history
+• Device management
+• Privacy controls
+
+**Current Status:**
+• PGP Verification: Available
+• 2FA: Coming Soon
+• Privacy: Standard
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔑 PGP Key', callback_data='pgp'))
+            markup.add(InlineKeyboardButton('🔐 2FA Setup', callback_data='setup_2fa'))
+            markup.add(InlineKeyboardButton('🔙 Back to Dashboard', callback_data='user_dashboard'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, security_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'user_analytics':
+            # Load user data for analytics
+            orders_data = load_orders()
+            user_orders = [order for order in orders_data.get('orders', []) if order['user_id'] == user_id]
+            total_spent = sum(float(order['total_amount']) for order in user_orders)
+            
+            # Calculate average order value
+            avg_order = total_spent / len(user_orders) if user_orders else 0
+            
+            analytics_text = f"""
+📊 **Shopping Analytics**
+
+**📈 Your Statistics:**
+• Total Orders: {len(user_orders)}
+• Total Spent: €{total_spent:.2f}
+• Average Order: €{avg_order:.2f}
+• Cart Items: {len(user_carts.get(user_id, []))}
+
+**🎯 Insights:**
+• Most active shopping time
+• Preferred categories
+• Spending patterns
+• Recommendation accuracy
+
+**📊 Detailed Reports:**
+• Monthly spending
+• Category preferences
+• Order frequency
+• Price sensitivity
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('📈 Monthly Report', callback_data='monthly_report'))
+            markup.add(InlineKeyboardButton('🎯 Category Analysis', callback_data='category_analysis'))
+            markup.add(InlineKeyboardButton('🔙 Back to Dashboard', callback_data='user_dashboard'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, analytics_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'user_preferences':
+            preferences_text = """
+🎯 **User Preferences**
+
+**Personalization Settings:**
+• Product recommendations
+• Notification frequency
+• Language preferences
+• Display options
+• Shopping behavior
+
+**AI Learning:**
+• Recommendation accuracy
+• Preference learning
+• Behavior analysis
+• Custom suggestions
+
+**Privacy Controls:**
+• Data collection
+• Personalization level
+• Sharing preferences
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🎯 Recommendation Settings', callback_data='recommendation_preferences'))
+            markup.add(InlineKeyboardButton('🔔 Notification Preferences', callback_data='notification_preferences'))
+            markup.add(InlineKeyboardButton('🔙 Back to Dashboard', callback_data='user_dashboard'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, preferences_text, reply_markup=markup, parse_mode='Markdown')
 
     @bot.message_handler(func=lambda message: message.text and not message.text.startswith('/') and not message.text.startswith('admin'))
     def handle_search_message(message):
