@@ -12,12 +12,16 @@ from fraud_detection import FraudDetectionSystem, setup_fraud_detection_handlers
 from smart_auto_response import SmartAutoResponseSystem, setup_smart_auto_response_handlers
 
 # Load environment variables
-load_dotenv('config.env')
+# Try to load from config.env first (for local development), then fall back to system env vars
+try:
+    load_dotenv('config.env')
+except FileNotFoundError:
+    print("config.env not found, using system environment variables")
 
 # Get configuration from environment variables
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN not found in environment variables. Please check your config.env file.")
+    raise ValueError("BOT_TOKEN not found in environment variables. Please set BOT_TOKEN in Railway environment variables or config.env file.")
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
@@ -95,7 +99,7 @@ BTC_ADDRESS = os.getenv('BTC_ADDRESS')
 XMR_ADDRESS = os.getenv('XMR_ADDRESS')
 
 if not BTC_ADDRESS or not XMR_ADDRESS:
-    raise ValueError("Cryptocurrency addresses not found in environment variables. Please check your config.env file.")
+    raise ValueError("Cryptocurrency addresses not found in environment variables. Please set BTC_ADDRESS and XMR_ADDRESS in Railway environment variables or config.env file.")
 
 # PGP Setup - Optional functionality
 gpg = None
