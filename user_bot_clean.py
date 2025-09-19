@@ -1386,6 +1386,60 @@ Just type your address in the format above and send it to this chat.
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, "Order deleted. Starting fresh!", reply_markup=create_main_menu(user_id, user_carts, shop_info))
             bot.answer_callback_query(call.id, "Order deleted")
 
+    @bot.message_handler(func=lambda message: message.text and not message.text.startswith('/') and not message.text.startswith('admin'))
+    def handle_search_message(message):
+        """Handle text-based search queries"""
+        user_id = message.from_user.id
+        text = message.text.strip()
+        
+        # Check if user is waiting for address input - if so, skip search handling
+        if user_id in user_states and user_states[user_id].get('waiting_for_address'):
+            return  # Let the main handler deal with address input
+        
+        # Check if this looks like a product search
+        if len(text) > 2 and len(text) < 100:  # Reasonable search query length
+            # Search for products containing the text
+            found_products = []
+            for category in categories:
+                for product in category['products']:
+                    if text.lower() in product['name'].lower():
+                        found_products.append((product, category))
+            
+            if found_products:
+                # Show search results
+                search_text = f"🔍 **Search Results for: '{text}'**\n\n"
+                
+                for i, (product, category) in enumerate(found_products[:5]):  # Limit to 5 results
+                    if 'quantities' in product:
+                        min_price = min(qty['price'] for qty in product['quantities'])
+                        max_price = max(qty['price'] for qty in product['quantities'])
+                        price_text = f"€{min_price:.1f}-€{max_price:.1f}"
+                    else:
+                        price_text = f"€{product.get('price', 0):.2f}"
+                    
+                    search_text += f"{i+1}. **{product['name']}**\n"
+                    search_text += f"   Category: {category['name']}\n"
+                    search_text += f"   Price: {price_text}\n\n"
+                
+                if len(found_products) > 5:
+                    search_text += f"... and {len(found_products) - 5} more results\n\n"
+                
+                search_text += "Click on a product to view details or use the menu buttons below."
+                
+                # Create markup with product buttons
+                markup = InlineKeyboardMarkup(row_width=1)
+                for i, (product, category) in enumerate(found_products[:5]):
+                    button_text = f"{i+1}. {product['name']} - {category['name']}"
+                    markup.add(InlineKeyboardButton(button_text, callback_data=f"add_{product['name']}|{product.get('price', 0)}"))
+                
+                markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+                
+                bot.reply_to(message, search_text, reply_markup=markup, parse_mode='Markdown')
+                return
+        
+        # If no products found or not a search query, let other handlers deal with it
+        return
+
     @bot.message_handler(func=lambda message: not message.text.startswith('/admin') and not message.text.startswith('/reload') and not message.text.startswith('/stats'))
     def handle_user_message(message):
         user_id = message.from_user.id

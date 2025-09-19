@@ -626,6 +626,30 @@ Choose an option below or just type your question!
         except Exception as e:
             print(f"Support: Error checking user state: {e}")
         
+        # Check if this is a support-related message
+        support_keywords = [
+            'help', 'support', 'problem', 'issue', 'error', 'bug', 'question', 'ask',
+            'ticket', 'complaint', 'refund', 'return', 'cancel', 'order status',
+            'delivery problem', 'payment issue', 'not working', 'broken',
+            'sahajjo', 'help chai', 'problem ache', 'kono problem', 'kono issue',
+            'order kothay', 'payment kivabe korbo', 'delivery kobe hobe'
+        ]
+        
+        # Check if this looks like a product search (exclude from support)
+        search_indicators = [
+            'search', 'find', 'look for', 'khujte', 'khujbo', 'product', 'item',
+            'buy', 'purchase', 'order', 'cart', 'add to cart'
+        ]
+        
+        message_lower = text.lower()
+        is_support_related = any(keyword in message_lower for keyword in support_keywords)
+        is_search_related = any(keyword in message_lower for keyword in search_indicators)
+        
+        # Skip if it's a search query or not clearly support-related
+        if is_search_related or (not is_support_related and user_id not in support_states):
+            print(f"Support: Skipping {'search' if is_search_related else 'non-support'} message from user {user_id}: '{text[:50]}...'")
+            return  # Let user_bot_clean.py handle it
+        
         # print(f"Support message handler: User {user_id} sent: '{text}'")
         
         # Check if user is in support state
