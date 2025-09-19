@@ -616,6 +616,16 @@ Choose an option below or just type your question!
         username = message.from_user.username or "Unknown"
         text = message.text
         
+        # Check if user is waiting for address input - if so, skip support handling
+        try:
+            # Access user_states from global scope
+            user_states = globals().get('user_states', {})
+            if user_id in user_states and user_states[user_id].get('waiting_for_address'):
+                print(f"Support: Skipping support handling for user {user_id} - waiting for address input")
+                return  # Let user_bot_clean.py handle the address input
+        except Exception as e:
+            print(f"Support: Error checking user state: {e}")
+        
         # print(f"Support message handler: User {user_id} sent: '{text}'")
         
         # Check if user is in support state
