@@ -1,0 +1,14 @@
+{
+  "total_tickets": 5,
+  "resolved_tickets": 1,
+  "avg_response_time": 0,
+  "customer_satisfaction": 0,
+  "daily_tickets": {
+    "2025-09-20": 5
+  },
+  "category_stats": {
+    "Order Issues": 3,
+    "Technical Support": 1,
+    "Account Issues": 1
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "categories": [
+    {
+      "name": "MDMA",
+      "products": [
+        {"name": "MDMA Crystal", "price": 25.99, "description": "High-quality crystal form"},
+        {"name": "MDMA Pills", "price": 15.50, "description": "Reliable pressed pills"}
+      ]
+    },
+    {
+      "name": "KETAMINE",
+      "products": [
+        {"name": "Ketamine Powder", "price": 45.00, "description": "Premium powder form"},
+        {"name": "Ketamine Vials", "price": 32.75, "description": "Medical grade vials"}
+      ]
+    },
+    {
+      "name": "STIMULANTS",
+      "products": [
+        {"name": "Amphetamine", "price": 18.99, "description": "High-quality stimulant"},
+        {"name": "Cocaine", "price": 55.00, "description": "Premium quality"}
+      ]
+    },
+    {
+      "name": "EUPHORETICS",
+      "products": [
+        {"name": "Mephedrone", "price": 22.50, "description": "Euphoric stimulant"},
+        {"name": "Methylone", "price": 19.99, "description": "Popular euphoric"}
+      ]
+    },
+    {
+      "name": "2-CB",
+      "products": [
+        {"name": "2C-B Powder", "price": 28.00, "description": "Psychedelic powder"},
+        {"name": "2C-B Pills", "price": 12.99, "description": "Convenient pill form"}
+      ]
+    },
+    {
+      "name": "Psychedelics",
+      "products": [
+        {"name": "LSD Tabs", "price": 8.99, "description": "Classic psychedelic"},
+        {"name": "Magic Mushrooms", "price": 35.00, "description": "Natural psychedelic"}
+      ]
+    },
+    {
+      "name": "OPIATES",
+      "products": [
+        {"name": "Heroin", "price": 40.00, "description": "High purity"},
+        {"name": "Morphine", "price": 25.50, "description": "Medical grade"}
+      ]
+    },
+    {
+      "name": "BENZOS",
+      "products": [
+        {"name": "Xanax", "price": 2.50, "description": "Anxiety relief"},
+        {"name": "Valium", "price": 3.00, "description": "Muscle relaxant"}
+      ]
+    }
+  ]
+}

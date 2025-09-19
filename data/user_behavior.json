@@ -1,0 +1,48 @@
+{
+  "view_history": {
+    "12345": [
+      {
+        "product": "MDMA Crystal",
+        "category": "MDMA",
+        "timestamp": "2025-09-20T02:28:00.747272",
+        "session_id": "2025-09-20T02:28:00.747272"
+      },
+      {
+        "product": "Ketamine Powder",
+        "category": "KETAMINE",
+        "timestamp": "2025-09-20T02:28:00.748270",
+        "session_id": "2025-09-20T02:28:00.747272"
+      }
+    ],
+    "12345": [
+      {
+        "product": "Test Product",
+        "category": "Test Category",
+        "timestamp": "2025-09-20T02:33:06.450496",
+        "session_id": "2025-09-20T02:33:06.450496"
+      }
+    ]
+  },
+  "purchase_history": {
+    "12345": [
+      {
+        "product": "Test Product 1",
+        "category": "Test Category",
+        "price": 10.0,
+        "timestamp": "2025-09-20T01:12:06.040194"
+      }
+    ]
+  },
+  "search_history": {},
+  "cart_abandonment": {},
+  "session_data": {
+    "12345": {
+      "current_session": "2025-09-20T02:28:00.747272",
+      "session_count": 1
+    },
+    "12345": {
+      "current_session": "2025-09-20T02:33:06.450496",
+      "session_count": 1
+    }
+  }
+}

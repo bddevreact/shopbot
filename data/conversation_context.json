@@ -1,0 +1,12 @@
+{
+  "12345": {
+    "last_intent": "greeting_patterns",
+    "last_response": "Welcome! I'm here to help you with anything you need at Test Shop.\n\nI'm here to help you explore our products and make purchases. What would you like to know?",
+    "timestamp": "2025-09-20T01:12:06.053170",
+    "context": {
+      "user_type": "new_user",
+      "time_context": "after_hours",
+      "conversation_context": "first_message"
+    }
+  }
+}

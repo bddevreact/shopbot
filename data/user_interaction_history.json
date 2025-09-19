@@ -1,0 +1,19 @@
+{
+  "12345": {
+    "interactions": [
+      {
+        "message": "Hello, I need help with products",
+        "intent": "greeting_patterns",
+        "confidence": 0.2,
+        "context": {
+          "user_type": "new_user",
+          "time_context": "after_hours",
+          "conversation_context": "first_message"
+        },
+        "timestamp": "2025-09-20T01:12:06.053170"
+      }
+    ],
+    "preferences": {},
+    "satisfaction_scores": []
+  }
+}

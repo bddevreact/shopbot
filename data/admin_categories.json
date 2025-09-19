@@ -1,0 +1,634 @@
+{
+  "shop_info": {
+    "name": "Mr Zoidberg Shop",
+    "currency": "EUR",
+    "payment_methods": [
+      "BTC",
+      "XMR"
+    ],
+    "countries": [
+      "GER",
+      "AUS",
+      "USA"
+    ],
+    "promotion": "20% EXTRA on your order promotion now LIVE!",
+    "phrase_code": "WELCOME2024",
+    "discount_codes": {},
+    "about": {
+      "title": "Mr Zoidberg Shop",
+      "content": "🌍 <b>International Shipping from Germany</b>\n\n● We ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\n● Packages are vacuum-sealed, alcohol-cleaned, dog- and X-ray-proof, with decoys for bulk orders to ensure secure customs clearance.\n\n<b>Delivery Times:</b>\n\n● Europe: 2–7 days\n● Worldwide: 7–21 days\n\nℹ️ International shipping for small orders (up to 50g or 250 pills) available outside Europe—contact us for larger order pricing or custom listings.\nℹ️ No shipping to USA, India, UAE, Turkey, Thailand, Australia, or New Zealand. Contact us before ordering outside Europe.\n_____________________________________\n● <b>REFUND &amp; RESHIP POLICY</b>\n\n100% reship/50% refund - for tracked orders within Europe\n50% reship/25% refund - for untracked orders within Europe\n25% reship - for worldwide orders\n\n<b>Telegram</b>\n• Mr Worldwide\n\nCEO of @The_Worldwide_shop_bot &amp; @NWW_updates",
+      "visible": false
+    },
+    "contact": {
+      "telegram_bot": "@The_Worldwide_shop_bot",
+      "updates_channel": "@NWW_updates",
+      "ceo": "@Mr_Worldwide"
+    }
+  },
+  "categories": [
+    {
+      "id": "mdma",
+      "name": "MDMA",
+      "description": "High-quality MDMA products",
+      "active": true,
+      "products": [
+        {
+          "id": "mdma_dutch_champagne",
+          "name": "MDMA â˜… DUTCH CHAMPAGNE 84%",
+          "type": "Physical product",
+          "description": "Premium Dutch MDMA, lab-tested at 84% purity\nInduces euphoria, excitement, closeness, empathy, and heightened sensuality",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.\nBulk available up to 10kg per package",
+          "image_url": "https://i.postimg.cc/1zwR3qMw/ed8b1bb8-0dfb-4bd8-b9fa-3e03193c4787.jpg",
+          "quantities": [
+            {
+              "amount": "3g",
+              "price": 30.0
+            },
+            {
+              "amount": "5g",
+              "price": 45.0
+            },
+            {
+              "amount": "10g",
+              "price": 80.0
+            },
+            {
+              "amount": "25g",
+              "price": 175.0
+            },
+            {
+              "amount": "50g",
+              "price": 300.0
+            },
+            {
+              "amount": "100g",
+              "price": 500.0
+            },
+            {
+              "amount": "250g",
+              "price": 1000.0
+            },
+            {
+              "amount": "500g",
+              "price": 1500.0
+            },
+            {
+              "amount": "1000g",
+              "price": 2500.0
+            }
+          ],
+          "stock": 100,
+          "active": true
+        },
+        {
+          "id": "xtc_pop_smoke",
+          "name": "XTC â˜… POP SMOKE â˜… 300mg MDMA",
+          "type": "Physical product",
+          "description": "High-quality XTC pills\nPremium MDMA pills with 300mg content, lab-tested for purity and quality",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://i.postimg.cc/1zwR3qMw/ed8b1bb8-0dfb-4bd8-b9fa-3e03193c4787.jpg",
+          "quantities": [
+            {
+              "amount": "1 pill",
+              "price": 15.5
+            },
+            {
+              "amount": "5 pills",
+              "price": 70.0
+            },
+            {
+              "amount": "10 pills",
+              "price": 130.0
+            },
+            {
+              "amount": "25 pills",
+              "price": 300.0
+            },
+            {
+              "amount": "50 pills",
+              "price": 550.0
+            },
+            {
+              "amount": "100 pills",
+              "price": 1000.0
+            }
+          ],
+          "stock": 50,
+          "active": true
+        },
+        {
+          "id": "xtc_blue_punisher",
+          "name": "XTC â˜… BLUE PUNISHER â˜… 250mg MDMA",
+          "type": "Physical product",
+          "description": "Popular blue punisher pills\nHigh-quality MDMA pills with 250mg content, known for their distinctive blue color and reliable effects",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://i.postimg.cc/1zwR3qMw/ed8b1bb8-0dfb-4bd8-b9fa-3e03193c4787.jpg",
+          "quantities": [
+            {
+              "amount": "1 pill",
+              "price": 18.0
+            },
+            {
+              "amount": "5 pills",
+              "price": 80.0
+            },
+            {
+              "amount": "10 pills",
+              "price": 150.0
+            },
+            {
+              "amount": "25 pills",
+              "price": 350.0
+            },
+            {
+              "amount": "50 pills",
+              "price": 650.0
+            },
+            {
+              "amount": "100 pills",
+              "price": 1200.0
+            }
+          ],
+          "stock": 75,
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "ketamine",
+      "name": "KETAMINE",
+      "description": "Medical grade ketamine products",
+      "active": true,
+      "products": [
+        {
+          "id": "ketamine_powder",
+          "name": "Ketamine Powder",
+          "type": "Physical product",
+          "description": "Premium powder form\nMedical grade ketamine powder for therapeutic use",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://i.postimg.cc/1zwR3qMw/ed8b1bb8-0dfb-4bd8-b9fa-3e03193c4787.jpg",
+          "quantities": [
+            {
+              "amount": "1g",
+              "price": 45.0
+            },
+            {
+              "amount": "2g",
+              "price": 80.0
+            },
+            {
+              "amount": "5g",
+              "price": 180.0
+            },
+            {
+              "amount": "10g",
+              "price": 320.0
+            },
+            {
+              "amount": "25g",
+              "price": 700.0
+            },
+            {
+              "amount": "50g",
+              "price": 1200.0
+            }
+          ],
+          "stock": 75,
+          "active": true
+        },
+        {
+          "id": "ketamine_vials",
+          "name": "Ketamine Vials",
+          "type": "Physical product",
+          "description": "Medical grade vials\nProfessional grade ketamine in sterile vials",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://i.postimg.cc/1zwR3qMw/ed8b1bb8-0dfb-4bd8-b9fa-3e03193c4787.jpg",
+          "quantities": [
+            {
+              "amount": "1 vial",
+              "price": 32.75
+            },
+            {
+              "amount": "5 vials",
+              "price": 150.0
+            },
+            {
+              "amount": "10 vials",
+              "price": 280.0
+            },
+            {
+              "amount": "25 vials",
+              "price": 650.0
+            },
+            {
+              "amount": "50 vials",
+              "price": 1200.0
+            }
+          ],
+          "stock": 30,
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "stimulants",
+      "name": "STIMULANTS",
+      "description": "High-quality stimulant products",
+      "active": true,
+      "products": [
+        {
+          "id": "amphetamine",
+          "name": "Amphetamine",
+          "type": "Physical product",
+          "description": "High-quality stimulant\nPremium amphetamine powder for enhanced focus and energy",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://i.postimg.cc/1zwR3qMw/ed8b1bb8-0dfb-4bd8-b9fa-3e03193c4787.jpg",
+          "quantities": [
+            {
+              "amount": "1g",
+              "price": 18.99
+            },
+            {
+              "amount": "2g",
+              "price": 35.0
+            },
+            {
+              "amount": "5g",
+              "price": 80.0
+            },
+            {
+              "amount": "10g",
+              "price": 150.0
+            },
+            {
+              "amount": "25g",
+              "price": 350.0
+            },
+            {
+              "amount": "50g",
+              "price": 650.0
+            }
+          ],
+          "stock": 80,
+          "active": true
+        },
+        {
+          "id": "cocaine",
+          "name": "Cocaine",
+          "type": "Physical product",
+          "description": "Premium quality\nHigh-grade cocaine powder, lab-tested for purity",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://i.postimg.cc/1zwR3qMw/ed8b1bb8-0dfb-4bd8-b9fa-3e03193c4787.jpg",
+          "quantities": [
+            {
+              "amount": "1g",
+              "price": 55.0
+            },
+            {
+              "amount": "2g",
+              "price": 100.0
+            },
+            {
+              "amount": "5g",
+              "price": 220.0
+            },
+            {
+              "amount": "10g",
+              "price": 400.0
+            },
+            {
+              "amount": "25g",
+              "price": 900.0
+            },
+            {
+              "amount": "50g",
+              "price": 1600.0
+            }
+          ],
+          "stock": 25,
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "euphoretics",
+      "name": "EUPHORETICS",
+      "description": "Euphoric stimulant products",
+      "active": true,
+      "products": [
+        {
+          "id": "mephedrone",
+          "name": "Mephedrone",
+          "type": "Physical product",
+          "description": "Euphoric stimulant\nHigh-quality mephedrone powder for enhanced mood and energy",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://imgfoto.host/image/mephedrone.png",
+          "quantities": [
+            {
+              "amount": "1g",
+              "price": 22.5
+            },
+            {
+              "amount": "2g",
+              "price": 40.0
+            },
+            {
+              "amount": "5g",
+              "price": 90.0
+            },
+            {
+              "amount": "10g",
+              "price": 170.0
+            },
+            {
+              "amount": "25g",
+              "price": 400.0
+            },
+            {
+              "amount": "50g",
+              "price": 750.0
+            }
+          ],
+          "stock": 60,
+          "active": true
+        },
+        {
+          "id": "methylone",
+          "name": "Methylone",
+          "type": "Physical product",
+          "description": "Popular euphoric\nPremium methylone powder for enhanced euphoria and sociability",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://imgfoto.host/image/methylone.png",
+          "quantities": [
+            {
+              "amount": "1g",
+              "price": 19.99
+            },
+            {
+              "amount": "2g",
+              "price": 35.0
+            },
+            {
+              "amount": "5g",
+              "price": 80.0
+            },
+            {
+              "amount": "10g",
+              "price": 150.0
+            },
+            {
+              "amount": "25g",
+              "price": 350.0
+            },
+            {
+              "amount": "50g",
+              "price": 650.0
+            }
+          ],
+          "stock": 40,
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "2cb",
+      "name": "2-CB",
+      "description": "Psychedelic 2C-B products",
+      "active": true,
+      "products": [
+        {
+          "id": "2cb_powder",
+          "name": "2C-B Powder",
+          "type": "Physical product",
+          "description": "Psychedelic powder\nHigh-quality 2C-B powder for enhanced psychedelic experiences",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://imgfoto.host/image/2cb-powder.png",
+          "quantities": [
+            {
+              "amount": "100mg",
+              "price": 28.0
+            },
+            {
+              "amount": "250mg",
+              "price": 60.0
+            },
+            {
+              "amount": "500mg",
+              "price": 110.0
+            },
+            {
+              "amount": "1g",
+              "price": 200.0
+            },
+            {
+              "amount": "2g",
+              "price": 380.0
+            },
+            {
+              "amount": "5g",
+              "price": 900.0
+            }
+          ],
+          "stock": 35,
+          "active": true
+        },
+        {
+          "id": "2cb_pills",
+          "name": "2C-B Pills",
+          "type": "Physical product",
+          "description": "Convenient pill form\nPre-dosed 2C-B pills for easy consumption",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://imgfoto.host/image/2cb-pills.png",
+          "quantities": [
+            {
+              "amount": "1 pill",
+              "price": 12.99
+            },
+            {
+              "amount": "5 pills",
+              "price": 55.0
+            },
+            {
+              "amount": "10 pills",
+              "price": 100.0
+            },
+            {
+              "amount": "25 pills",
+              "price": 220.0
+            },
+            {
+              "amount": "50 pills",
+              "price": 400.0
+            },
+            {
+              "amount": "100 pills",
+              "price": 750.0
+            }
+          ],
+          "stock": 45,
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "psychedelics",
+      "name": "Psychedelics",
+      "description": "Classic psychedelic products",
+      "active": true,
+      "products": [
+        {
+          "id": "lsd_tabs",
+          "name": "LSD Tabs",
+          "type": "Physical product",
+          "description": "Classic psychedelic\nHigh-quality LSD tabs for profound psychedelic experiences",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://i.postimg.cc/1zwR3qMw/ed8b1bb8-0dfb-4bd8-b9fa-3e03193c4787.jpg",
+          "quantities": [
+            {
+              "amount": "1 tab",
+              "price": 8.99
+            },
+            {
+              "amount": "5 tabs",
+              "price": 35.0
+            },
+            {
+              "amount": "10 tabs",
+              "price": 65.0
+            },
+            {
+              "amount": "25 tabs",
+              "price": 150.0
+            },
+            {
+              "amount": "50 tabs",
+              "price": 280.0
+            },
+            {
+              "amount": "100 tabs",
+              "price": 500.0
+            }
+          ],
+          "stock": 200,
+          "active": true
+        },
+        {
+          "id": "magic_mushrooms",
+          "name": "Magic Mushrooms",
+          "type": "Physical product",
+          "description": "Natural psychedelic\nPremium magic mushrooms for natural psychedelic experiences",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://imgfoto.host/image/magic-mushrooms.png",
+          "quantities": [
+            {
+              "amount": "3.5g",
+              "price": 35.0
+            },
+            {
+              "amount": "7g",
+              "price": 60.0
+            },
+            {
+              "amount": "14g",
+              "price": 110.0
+            },
+            {
+              "amount": "28g",
+              "price": 200.0
+            },
+            {
+              "amount": "56g",
+              "price": 380.0
+            },
+            {
+              "amount": "112g",
+              "price": 700.0
+            }
+          ],
+          "stock": 20,
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "opiates",
+      "name": "OPIATES",
+      "description": "High-quality opiate products",
+      "active": true,
+      "products": [
+        {
+          "id": "heroin",
+          "name": "Heroin",
+          "type": "Physical product",
+          "description": "High purity\nPremium heroin powder, lab-tested for purity and quality",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://imgfoto.host/image/heroin.png",
+          "quantities": [
+            {
+              "amount": "0.5g",
+              "price": 40.0
+            },
+            {
+              "amount": "1g",
+              "price": 70.0
+            },
+            {
+              "amount": "2g",
+              "price": 130.0
+            },
+            {
+              "amount": "5g",
+              "price": 300.0
+            },
+            {
+              "amount": "10g",
+              "price": 550.0
+            },
+            {
+              "amount": "25g",
+              "price": 1200.0
+            }
+          ],
+          "stock": 15,
+          "active": true
+        },
+        {
+          "id": "morphine",
+          "name": "Morphine",
+          "type": "Physical product",
+          "description": "Medical grade\nHigh-quality morphine powder for therapeutic use",
+          "shipping": "International Shipping from Germany\nWe ship via Deutsche Post (DHL), with DPD or other couriers available for larger orders upon request.\nPackages are vacuum-sealed, alcohol-cleaned, dog- and Xray-proof, with decoys for bulk orders to ensure secure customs clearance.",
+          "image_url": "https://imgfoto.host/image/morphine.png",
+          "quantities": [
+            {
+              "amount": "1g",
+              "price": 25.5
+            },
+            {
+              "amount": "2g",
+              "price": 45.0
+            },
+            {
+              "amount": "5g",
+              "price": 100.0
+            },
+            {
+              "amount": "10g",
+              "price": 180.0
+            },
+            {
+              "amount": "25g",
+              "price": 400.0
+            },
+            {
+              "amount": "50g",
+              "price": 750.0
+            }
+          ],
+          "stock": 25,
+          "active": true
+        }
+      ]
+    }
+  ]
+}

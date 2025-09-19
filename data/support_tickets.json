@@ -1,0 +1,86 @@
+{
+  "tickets": [
+    {
+      "id": 1,
+      "user_id": 12345,
+      "username": "testuser",
+      "category": "Order Issues",
+      "message": "I need help with my order",
+      "status": "resolved",
+      "priority": "medium",
+      "created_at": "2025-09-20T00:55:39.372513",
+      "updated_at": "2025-09-20T00:55:39.404156",
+      "responses": [
+        {
+          "id": 1,
+          "responder_id": 12345,
+          "response": "Thank you for contacting us!",
+          "is_admin": true,
+          "timestamp": "2025-09-20T00:55:39.402161"
+        }
+      ],
+      "assigned_to": null,
+      "resolution": "Issue resolved successfully",
+      "resolved_by": 12345
+    },
+    {
+      "id": 2,
+      "user_id": 12345,
+      "username": "testuser",
+      "category": "Order Issues",
+      "message": "I need help with my order",
+      "status": "open",
+      "priority": "medium",
+      "created_at": "2025-09-20T01:12:06.081086",
+      "updated_at": "2025-09-20T01:12:06.081086",
+      "responses": [],
+      "assigned_to": null,
+      "resolution": null
+    },
+    {
+      "id": 3,
+      "user_id": 6251161332,
+      "username": "mushfiqmoon",
+      "category": "Order Issues",
+      "message": "📝 Create Ticket - Order Issues\n\nPlease describe your issue in detail. Be as specific as possible to help us assist you better.\n\nCategory: Order Issues\n\nType your message below, or type 'cancel' to abort.",
+      "status": "open",
+      "priority": "medium",
+      "created_at": "2025-09-20T02:06:00.239962",
+      "updated_at": "2025-09-20T02:06:00.239962",
+      "responses": [],
+      "assigned_to": null,
+      "resolution": null
+    },
+    {
+      "id": 4,
+      "user_id": 6251161332,
+      "username": "mushfiqmoon",
+      "category": "Technical Support",
+      "message": "agent",
+      "status": "open",
+      "priority": "medium",
+      "created_at": "2025-09-20T02:54:00.370000",
+      "updated_at": "2025-09-20T02:54:00.370000",
+      "responses": [],
+      "assigned_to": null,
+      "resolution": null
+    },
+    {
+      "id": 5,
+      "user_id": 6251161332,
+      "username": "mushfiqmoon",
+      "category": "Account Issues",
+      "message": "Account Issues",
+      "status": "open",
+      "priority": "medium",
+      "created_at": "2025-09-20T02:54:52.701839",
+      "updated_at": "2025-09-20T02:54:52.701839",
+      "responses": [],
+      "assigned_to": null,
+      "resolution": null
+    }
+  ],
+  "next_ticket_id": 6,
+  "active_tickets": 4,
+  "resolved_tickets": 1
+}

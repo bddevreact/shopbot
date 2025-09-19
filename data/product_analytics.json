@@ -1,0 +1,55 @@
+{
+  "view_counts": {
+    "Test Product 1": 2,
+    "Test Product 2": 1
+  },
+  "purchase_counts": {
+    "Test Product 1": 2
+  },
+  "conversion_rates": {
+    "Test Product 1": 1.0
+  },
+  "popularity_scores": {},
+  "iPhone 15": {
+    "views": 1,
+    "purchases": 0,
+    "total_revenue": 0,
+    "category": "Electronics",
+    "last_updated": "2025-09-20T02:15:51.242657"
+  },
+  "Samsung Galaxy": {
+    "views": 1,
+    "purchases": 0,
+    "total_revenue": 0,
+    "category": "Electronics",
+    "last_updated": "2025-09-20T02:15:51.243655"
+  },
+  "Nike Shoes": {
+    "views": 1,
+    "purchases": 0,
+    "total_revenue": 0,
+    "category": "Clothing",
+    "last_updated": "2025-09-20T02:15:51.244652"
+  },
+  "MDMA Crystal": {
+    "views": 1,
+    "purchases": 0,
+    "total_revenue": 0,
+    "category": "MDMA",
+    "last_updated": "2025-09-20T02:28:00.747272"
+  },
+  "Ketamine Powder": {
+    "views": 1,
+    "purchases": 0,
+    "total_revenue": 0,
+    "category": "KETAMINE",
+    "last_updated": "2025-09-20T02:28:00.748270"
+  },
+  "Test Product": {
+    "views": 1,
+    "purchases": 0,
+    "total_revenue": 0,
+    "category": "Test Category",
+    "last_updated": "2025-09-20T02:33:06.450496"
+  }
+}
