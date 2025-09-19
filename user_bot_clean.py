@@ -316,24 +316,32 @@ def create_main_menu(user_id, user_carts, shop_info=None):
     markup = InlineKeyboardMarkup(row_width=2)
     
     # Determine about button text based on visibility
-    about_button_text = '≡ƒôû Show About'
+    about_button_text = '📖 Show About'
     if shop_info and 'about' in shop_info and shop_info['about'].get('visible', False):
-        about_button_text = '≡ƒôû Hide About'
+        about_button_text = '📖 Hide About'
     
     markup.add(
-        InlineKeyboardButton('≡ƒ¢ì∩╕Å Products', callback_data='products'),
-        InlineKeyboardButton(about_button_text, callback_data='about')
+        InlineKeyboardButton('🛍️ Products', callback_data='products'),
+        InlineKeyboardButton('👤 My Account', callback_data='user_dashboard')
     )
     markup.add(
-        InlineKeyboardButton('≡ƒöæ Verify PGP Key', callback_data='pgp'),
-        InlineKeyboardButton(f'≡ƒ¢Æ Cart (Γé¼{cart_total:.2f})', callback_data='cart')
+        InlineKeyboardButton('🔍 Search', callback_data='advanced_search'),
+        InlineKeyboardButton(f'🛒 Cart (€{cart_total:.2f})', callback_data='cart')
     )
     markup.add(
-        InlineKeyboardButton('≡ƒôª Orders', callback_data='orders'),
-        InlineKeyboardButton('≡ƒô░ NWW Updates', callback_data='updates')
+        InlineKeyboardButton('📦 Orders', callback_data='orders'),
+        InlineKeyboardButton('🎁 Wishlist', callback_data='wishlist')
     )
     markup.add(
-        InlineKeyboardButton('≡ƒöä Restart Session', callback_data='restart_session')
+        InlineKeyboardButton('🆘 Support', callback_data='support_menu'),
+        InlineKeyboardButton('🎯 Recommendations', callback_data='recommendations_menu')
+    )
+    markup.add(
+        InlineKeyboardButton('📰 Updates', callback_data='updates'),
+        InlineKeyboardButton('🔑 PGP Key', callback_data='pgp')
+    )
+    markup.add(
+        InlineKeyboardButton('🔄 Restart Session', callback_data='restart_session')
     )
     return markup
 
@@ -474,6 +482,70 @@ def create_user_dashboard(user_id, user_carts, shop_info):
     
     return dashboard_text, markup
 
+def create_advanced_search_menu(categories):
+    """Create advanced search menu"""
+    search_text = """
+🔍 **Advanced Search**
+
+**Search Options:**
+• Search by product name
+• Filter by category
+• Price range search
+• Sort by popularity/price
+• View trending products
+
+**Quick Filters:**
+• New arrivals
+• Best sellers
+• On sale items
+• Featured products
+    """.strip()
+    
+    markup = InlineKeyboardMarkup(row_width=2)
+    markup.add(
+        InlineKeyboardButton('🔍 Search Products', callback_data='search_products'),
+        InlineKeyboardButton('🏷️ By Category', callback_data='search_by_category')
+    )
+    markup.add(
+        InlineKeyboardButton('💰 Price Range', callback_data='search_by_price'),
+        InlineKeyboardButton('⭐ Sort Options', callback_data='search_sort')
+    )
+    markup.add(
+        InlineKeyboardButton('🔥 Trending', callback_data='search_trending'),
+        InlineKeyboardButton('🆕 New Arrivals', callback_data='search_new')
+    )
+    markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+    
+    return search_text, markup
+
+def create_wishlist_menu(user_id):
+    """Create wishlist menu"""
+    # For now, return empty wishlist (can be enhanced with actual wishlist storage)
+    wishlist_text = """
+🎁 **My Wishlist**
+
+**Your saved items will appear here:**
+• Save products for later
+• Get notified of price drops
+• Quick reorder options
+• Share with friends
+
+**Wishlist is empty. Start adding products!**
+    """.strip()
+    
+    markup = InlineKeyboardMarkup(row_width=2)
+    markup.add(
+        InlineKeyboardButton('🛍️ Browse Products', callback_data='products'),
+        InlineKeyboardButton('🎯 Recommendations', callback_data='recommendations_menu')
+    )
+    markup.add(
+        InlineKeyboardButton('🔔 Price Alerts', callback_data='price_alerts'),
+        InlineKeyboardButton('📤 Share Wishlist', callback_data='share_wishlist')
+    )
+    markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+    
+    return wishlist_text, markup
+
 def setup_user_handlers(bot, categories, shop_info, user_carts, user_states, gpg, PUBLIC_KEY, PRIVATE_PASSPHRASE, BTC_ADDRESS, XMR_ADDRESS, admin_config):
     """Setup all user-related handlers"""
     
@@ -589,11 +661,13 @@ Just type your secret phrase code and send it to this chat.
             
             bot.send_message(message.chat.id, phrase_text, parse_mode='Markdown')
 
-    @bot.callback_query_handler(func=lambda call: call.data in ['products', 'about', 'pgp', 'cart', 'orders', 'updates', 'back', 'checkout', 'payment_sent', 'order_no', 'order_yes', 'order_confirm', 'order_cancel', 'order_paid', 'discount_code', 'select_payment', 'enter_address', 'select_delivery', 'delete_order', 'tracking_info', 'restart_session'] or 
+    @bot.callback_query_handler(func=lambda call: call.data in ['products', 'about', 'pgp', 'cart', 'orders', 'updates', 'back', 'checkout', 'payment_sent', 'order_no', 'order_yes', 'order_confirm', 'order_cancel', 'order_paid', 'discount_code', 'select_payment', 'enter_address', 'select_delivery', 'delete_order', 'tracking_info', 'restart_session', 'support_menu', 'recommendations_menu', 'user_dashboard', 'advanced_search', 'wishlist', 'order_history', 'user_settings', 'security_settings', 'user_analytics', 'user_preferences', 'search_products', 'search_by_category', 'search_by_price', 'search_sort', 'search_trending', 'search_new', 'price_alerts', 'share_wishlist', 'live_chat', 'faq', 'contact_support', 'recommendations_personal', 'recommendations_trending', 'recommendations_similar'] or 
                                 call.data.startswith('country_') or call.data.startswith('category_') or 
                                 call.data.startswith('add_') or call.data.startswith('remove_') or 
                                 call.data.startswith('test_verify_') or call.data.startswith('qty_') or
-                                call.data.startswith('delivery_') or call.data.startswith('payment_'))
+                                call.data.startswith('delivery_') or call.data.startswith('payment_') or
+                                call.data.startswith('recommendations_') or call.data.startswith('wishlist_') or
+                                call.data.startswith('search_category_'))
     def user_callback_handler(call):
         user_id = call.from_user.id
         if user_id not in user_states:
@@ -1597,6 +1671,421 @@ Start shopping to see your order history here!
             markup.add(InlineKeyboardButton('🔙 Back to Dashboard', callback_data='user_dashboard'))
             
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, preferences_text, reply_markup=markup, parse_mode='Markdown')
+        
+        # Advanced Search features
+        elif call.data == 'advanced_search':
+            search_text, markup = create_advanced_search_menu(categories)
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, search_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'search_products':
+            search_text = """
+🔍 **Search Products**
+
+Type your search query to find products:
+
+**Search Tips:**
+• Use product names
+• Include brand names
+• Search by category
+• Use keywords
+
+**Example searches:**
+• "cannabis"
+• "edibles"
+• "vape"
+• "concentrate"
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Search', callback_data='advanced_search'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, search_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'search_by_category':
+            # Show categories for search
+            category_markup = InlineKeyboardMarkup(row_width=1)
+            for category in categories:
+                category_markup.add(InlineKeyboardButton(f"📂 {category['name']}", callback_data=f"search_category_{category['name']}"))
+            category_markup.add(InlineKeyboardButton('🔙 Back to Search', callback_data='advanced_search'))
+            
+            search_text = "**Select a category to search:**"
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, search_text, reply_markup=category_markup, parse_mode='Markdown')
+        
+        elif call.data == 'search_by_price':
+            price_text = """
+💰 **Price Range Search**
+
+**Available price ranges:**
+• Under €50
+• €50 - €100
+• €100 - €200
+• €200 - €500
+• Over €500
+
+**Coming Soon:**
+• Custom price range
+• Price alerts
+• Best deals
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Search', callback_data='advanced_search'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, price_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'search_sort':
+            sort_text = """
+⭐ **Sort Options**
+
+**Sort by:**
+• Popularity (Most bought)
+• Price (Low to High)
+• Price (High to Low)
+• Newest First
+• Best Rated
+
+**Coming Soon:**
+• Custom sorting
+• Filter combinations
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Search', callback_data='advanced_search'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, sort_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'search_trending':
+            trending_text = """
+🔥 **Trending Products**
+
+**Most Popular This Week:**
+• Top selling products
+• Customer favorites
+• Trending categories
+• Hot deals
+
+**Coming Soon:**
+• Real-time trending
+• Weekly reports
+• Trending alerts
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Search', callback_data='advanced_search'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, trending_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'search_new':
+            new_text = """
+🆕 **New Arrivals**
+
+**Latest Products:**
+• Recently added items
+• New categories
+• Fresh inventory
+• Limited editions
+
+**Coming Soon:**
+• New arrival notifications
+• Early access
+• Exclusive previews
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Search', callback_data='advanced_search'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, new_text, reply_markup=markup, parse_mode='Markdown')
+        
+        # Wishlist features
+        elif call.data == 'wishlist':
+            wishlist_text, markup = create_wishlist_menu(user_id)
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, wishlist_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'price_alerts':
+            alerts_text = """
+🔔 **Price Alerts**
+
+**Set up price alerts for:**
+• Your favorite products
+• Price drop notifications
+• Stock availability
+• New product alerts
+
+**Coming Soon:**
+• Custom price thresholds
+• Email notifications
+• SMS alerts
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Wishlist', callback_data='wishlist'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, alerts_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'share_wishlist':
+            share_text = """
+📤 **Share Wishlist**
+
+**Share your wishlist:**
+• Send to friends
+• Social media sharing
+• Email wishlist
+• Generate share link
+
+**Coming Soon:**
+• Collaborative wishlists
+• Gift suggestions
+• Wishlist groups
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Wishlist', callback_data='wishlist'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, share_text, reply_markup=markup, parse_mode='Markdown')
+        
+        # Support and Recommendations
+        elif call.data == 'support_menu':
+            support_text = """
+🆘 **Support Center**
+
+**Get Help:**
+• Live chat support
+• FAQ and guides
+• Contact information
+• Report issues
+
+**Support Options:**
+• General inquiries
+• Order support
+• Technical issues
+• Feedback
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('💬 Live Chat', callback_data='live_chat'))
+            markup.add(InlineKeyboardButton('📚 FAQ', callback_data='faq'))
+            markup.add(InlineKeyboardButton('📞 Contact', callback_data='contact_support'))
+            markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, support_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'recommendations_menu':
+            recommendations_text = """
+🎯 **Recommendations**
+
+**Personalized for you:**
+• Based on your preferences
+• Similar to your purchases
+• Trending in your area
+• AI-powered suggestions
+
+**Recommendation Types:**
+• Product suggestions
+• Category recommendations
+• Price-based suggestions
+• Seasonal recommendations
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🎯 For You', callback_data='recommendations_personal'))
+            markup.add(InlineKeyboardButton('🔥 Trending', callback_data='recommendations_trending'))
+            markup.add(InlineKeyboardButton('💡 Similar', callback_data='recommendations_similar'))
+            markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, recommendations_text, reply_markup=markup, parse_mode='Markdown')
+        
+        # Support sub-handlers
+        elif call.data == 'live_chat':
+            chat_text = """
+💬 **Live Chat Support**
+
+**Connect with our support team:**
+• Real-time assistance
+• Order help
+• Technical support
+• General inquiries
+
+**Available:**
+• Monday - Friday: 9 AM - 6 PM
+• Saturday: 10 AM - 4 PM
+• Sunday: Closed
+
+**Start a conversation by typing your message below.**
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Support', callback_data='support_menu'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, chat_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'faq':
+            faq_text = """
+📚 **Frequently Asked Questions**
+
+**Common Questions:**
+
+**Q: How do I place an order?**
+A: Browse products, add to cart, select delivery, and complete payment.
+
+**Q: What payment methods do you accept?**
+A: We accept Bitcoin (BTC) and Monero (XMR).
+
+**Q: How long does delivery take?**
+A: Delivery times vary by country. Check delivery options for details.
+
+**Q: Is my information secure?**
+A: Yes, we use PGP encryption and secure practices.
+
+**Q: Can I track my order?**
+A: Tracking numbers are provided 3 working days after purchase.
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Support', callback_data='support_menu'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, faq_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'contact_support':
+            contact_text = """
+📞 **Contact Support**
+
+**Get in touch:**
+• Telegram: @support_username
+• Email: support@example.com
+• Response time: Within 24 hours
+
+**For urgent issues:**
+• Use live chat during business hours
+• Include your order number if applicable
+
+**Business Hours:**
+• Monday - Friday: 9 AM - 6 PM
+• Saturday: 10 AM - 4 PM
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Support', callback_data='support_menu'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, contact_text, reply_markup=markup, parse_mode='Markdown')
+        
+        # Recommendations sub-handlers
+        elif call.data == 'recommendations_personal':
+            personal_text = """
+🎯 **Personalized Recommendations**
+
+**Based on your preferences:**
+• Your purchase history
+• Browsing behavior
+• Category interests
+• Price preferences
+
+**Recommended for you:**
+• Similar products to your purchases
+• Popular items in your categories
+• Best deals matching your budget
+• New arrivals you might like
+
+**Coming Soon:**
+• AI-powered suggestions
+• Machine learning recommendations
+• Personalized notifications
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Recommendations', callback_data='recommendations_menu'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, personal_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'recommendations_trending':
+            trending_text = """
+🔥 **Trending Recommendations**
+
+**What's popular right now:**
+• Most purchased this week
+• Customer favorites
+• Trending categories
+• Hot deals
+
+**Trending Products:**
+• Top sellers
+• Customer reviews
+• Popular combinations
+• Seasonal favorites
+
+**Coming Soon:**
+• Real-time trending data
+• Weekly trend reports
+• Trending notifications
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Recommendations', callback_data='recommendations_menu'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, trending_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'recommendations_similar':
+            similar_text = """
+💡 **Similar Products**
+
+**Products you might like:**
+• Based on your cart items
+• Similar to your purchases
+• Related categories
+• Complementary products
+
+**Similar to your interests:**
+• Same category products
+• Similar price range
+• Popular alternatives
+• Customer favorites
+
+**Coming Soon:**
+• Advanced similarity matching
+• Cross-category suggestions
+• Bundle recommendations
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Recommendations', callback_data='recommendations_menu'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, similar_text, reply_markup=markup, parse_mode='Markdown')
+        
+        # Search category handler
+        elif call.data.startswith('search_category_'):
+            category_name = call.data.replace('search_category_', '')
+            
+            # Find the category
+            selected_category = None
+            for category in categories:
+                if category['name'] == category_name:
+                    selected_category = category
+                    break
+            
+            if selected_category:
+                category_text = f"🔍 **Search in {category_name}**\n\n"
+                category_text += f"**Products in this category:**\n\n"
+                
+                for i, product in enumerate(selected_category['products'][:10]):  # Show first 10 products
+                    if 'quantities' in product:
+                        min_price = min(qty['price'] for qty in product['quantities'])
+                        max_price = max(qty['price'] for qty in product['quantities'])
+                        price_text = f"€{min_price:.1f}-€{max_price:.1f}"
+                    else:
+                        price_text = f"€{product.get('price', 0):.2f}"
+                    
+                    category_text += f"{i+1}. **{product['name']}** - {price_text}\n"
+                
+                if len(selected_category['products']) > 10:
+                    category_text += f"\n... and {len(selected_category['products']) - 10} more products"
+                
+                category_text += "\n\n**Type a product name to search within this category.**"
+                
+                markup = InlineKeyboardMarkup()
+                markup.add(InlineKeyboardButton('🔙 Back to Search', callback_data='advanced_search'))
+                
+                safe_edit_message(bot, call.message.chat.id, call.message.message_id, category_text, reply_markup=markup, parse_mode='Markdown')
+            else:
+                safe_edit_message(bot, call.message.chat.id, call.message.message_id, "Category not found.", reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('🔙 Back to Search', callback_data='advanced_search')))
 
     @bot.message_handler(func=lambda message: message.text and not message.text.startswith('/') and not message.text.startswith('admin'))
     def handle_search_message(message):
