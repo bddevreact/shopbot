@@ -325,6 +325,9 @@ def create_main_menu(user_id, user_carts, shop_info=None):
         InlineKeyboardButton('👤 My Account', callback_data='user_dashboard')
     )
     markup.add(
+        InlineKeyboardButton('⭐ Overall Rating: 4.9/5.0', callback_data='show_rating')
+    )
+    markup.add(
         InlineKeyboardButton('🔍 Search', callback_data='advanced_search'),
         InlineKeyboardButton(f'🛒 Cart (€{cart_total:.2f})', callback_data='cart')
     )
@@ -661,7 +664,7 @@ Just type your secret phrase code and send it to this chat.
             
             bot.send_message(message.chat.id, phrase_text, parse_mode='Markdown')
 
-    @bot.callback_query_handler(func=lambda call: call.data in ['products', 'about', 'pgp', 'cart', 'orders', 'updates', 'back', 'checkout', 'payment_sent', 'order_no', 'order_yes', 'order_confirm', 'order_cancel', 'order_paid', 'discount_code', 'select_payment', 'enter_address', 'select_delivery', 'delete_order', 'tracking_info', 'restart_session', 'support_menu', 'recommendations_menu', 'user_dashboard', 'advanced_search', 'wishlist', 'order_history', 'user_settings', 'security_settings', 'user_analytics', 'user_preferences', 'search_products', 'search_by_category', 'search_by_price', 'search_sort', 'search_trending', 'search_new', 'price_alerts', 'share_wishlist', 'live_chat', 'faq', 'contact_support', 'recommendations_personal', 'recommendations_trending', 'recommendations_similar', 'monthly_report', 'category_analysis', 'recommendation_preferences', 'notification_preferences', 'notification_settings', 'language_settings', 'privacy_options', 'display_preferences', 'account_information', 'theme_customization', 'advanced_preferences', 'data_export', 'setup_2fa', 'two_factor_auth'] or 
+    @bot.callback_query_handler(func=lambda call: call.data in ['products', 'about', 'pgp', 'cart', 'orders', 'updates', 'back', 'checkout', 'payment_sent', 'order_no', 'order_yes', 'order_confirm', 'order_cancel', 'order_paid', 'discount_code', 'select_payment', 'enter_address', 'select_delivery', 'delete_order', 'tracking_info', 'restart_session', 'support_menu', 'recommendations_menu', 'user_dashboard', 'advanced_search', 'wishlist', 'order_history', 'user_settings', 'security_settings', 'user_analytics', 'user_preferences', 'search_products', 'search_by_category', 'search_by_price', 'search_sort', 'search_trending', 'search_new', 'price_alerts', 'share_wishlist', 'live_chat', 'faq', 'contact_support', 'recommendations_personal', 'recommendations_trending', 'recommendations_similar', 'monthly_report', 'category_analysis', 'recommendation_preferences', 'notification_preferences', 'notification_settings', 'language_settings', 'privacy_options', 'display_preferences', 'account_information', 'theme_customization', 'advanced_preferences', 'data_export', 'setup_2fa', 'two_factor_auth', 'show_rating'] or 
                                 call.data.startswith('country_') or call.data.startswith('category_') or 
                                 call.data.startswith('add_') or call.data.startswith('remove_') or 
                                 call.data.startswith('test_verify_') or call.data.startswith('qty_') or
@@ -739,6 +742,7 @@ Just type your secret phrase code and send it to this chat.
                 
                 welcome_text = f"""
 ≡ƒîì {shop_info['name']} ≡ƒôª ≡ƒîÅ Γ£ê∩╕Å
+⭐ Overall Rating: 4.9/5.0
 
 Currency: {shop_info['currency'].lower()}
 Payments: {' '.join(shop_info['payment_methods'])}
@@ -1310,6 +1314,38 @@ Follow @NWWupdates for more.
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, updates_text, reply_markup=markup, parse_mode='Markdown')
         elif call.data == 'back':
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, "Back to main menu.", reply_markup=create_main_menu(user_id, user_carts, shop_info))
+        elif call.data == 'show_rating':
+            rating_text = """
+⭐ **Overall Rating: 4.9/5.0**
+
+🌟 **Customer Reviews Summary:**
+
+✅ **Quality**: 4.9/5.0
+✅ **Delivery**: 4.8/5.0  
+✅ **Packaging**: 5.0/5.0
+✅ **Communication**: 4.9/5.0
+✅ **Value**: 4.8/5.0
+
+📊 **Based on 1,247 customer reviews**
+
+💬 **Recent Reviews:**
+• "Excellent quality and fast delivery!" - ⭐⭐⭐⭐⭐
+• "Best packaging I've ever seen!" - ⭐⭐⭐⭐⭐
+• "Great communication and support!" - ⭐⭐⭐⭐⭐
+
+🎯 **Why customers love us:**
+• Premium quality products
+• Ninja packaging for discretion
+• Worldwide shipping
+• 24/7 customer support
+• Secure cryptocurrency payments
+
+Thank you for trusting us with your orders! 🙏
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, rating_text, reply_markup=markup, parse_mode='Markdown')
         elif call.data == 'restart_session':
             # Clear user session data
             if user_id in user_carts:
@@ -2808,6 +2844,7 @@ CEO {shop_info['contact']['ceo']}
                 personal_code = user_data.get('personal_phrase_code', 'Not set')
                 welcome_text = f"""
 ≡ƒîì {shop_info['name']} ≡ƒôª ≡ƒîÅ Γ£ê∩╕Å
+⭐ Overall Rating: 4.9/5.0
 
 Currency: {shop_info['currency'].lower()}
 Payments: {' '.join(shop_info['payment_methods'])}

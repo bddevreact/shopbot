@@ -9,6 +9,7 @@ import gnupg
 import datetime
 import random
 import string
+from languages import get_text, get_available_languages, is_valid_language
 
 # Helper functions
 def save_categories_to_file(categories, shop_info):
@@ -79,7 +80,8 @@ def get_or_create_user(user_id, username="", first_name="", last_name=""):
         "join_date": datetime.datetime.now().isoformat(),
         "order_number": users_data['user_counter'],
         "phrase_verified": False,
-        "personal_phrase_code": None
+        "personal_phrase_code": None,
+        "language": "EN"  # Default language
     }
     
     # Add to users list (not dictionary)
@@ -323,55 +325,94 @@ Product photo link -> {product.get('image_url', 'No image available')}
     else:
         safe_edit_message(bot, call.message.chat.id, call.message.message_id, product_text, reply_markup=markup, parse_mode='Markdown')
 
+def get_user_language(user_id):
+    """Get user's preferred language"""
+    users_data = load_users()
+    for user in users_data.get('users', []):
+        if user['user_id'] == user_id:
+            return user.get('language', 'EN')
+    return 'EN'  # Default to English
+
+def update_user_language(user_id, language_code):
+    """Update user's preferred language"""
+    if not is_valid_language(language_code):
+        return False
+    
+    users_data = load_users()
+    for user in users_data.get('users', []):
+        if user['user_id'] == user_id:
+            user['language'] = language_code
+            save_users(users_data)
+            return True
+    return False
+
 def create_main_menu(user_id, user_carts, shop_info=None):
     cart_total = sum(item['price'] for item in user_carts.get(user_id, []))
+    user_language = get_user_language(user_id)
     markup = InlineKeyboardMarkup(row_width=2)
     
     # Determine about button text based on visibility
-    about_button_text = '📖 Show About'
+    about_button_text = get_text(user_language, 'show_about')
     if shop_info and 'about' in shop_info and shop_info['about'].get('visible', False):
-        about_button_text = '📖 Hide About'
+        about_button_text = get_text(user_language, 'hide_about')
     
     markup.add(
-        InlineKeyboardButton('🛍️ Products', callback_data='products'),
-        InlineKeyboardButton('👤 My Account', callback_data='user_dashboard')
+        InlineKeyboardButton(get_text(user_language, 'products'), callback_data='products'),
+        InlineKeyboardButton(get_text(user_language, 'my_account'), callback_data='user_dashboard')
     )
     markup.add(
-        InlineKeyboardButton('🔍 Search', callback_data='advanced_search'),
-        InlineKeyboardButton(f'🛒 Cart (€{cart_total:.2f})', callback_data='cart')
+        InlineKeyboardButton(get_text(user_language, 'overall_rating'), callback_data='show_rating')
     )
     markup.add(
-        InlineKeyboardButton('📦 Orders', callback_data='orders'),
-        InlineKeyboardButton('🎁 Wishlist', callback_data='wishlist')
+        InlineKeyboardButton(get_text(user_language, 'search'), callback_data='advanced_search'),
+        InlineKeyboardButton(get_text(user_language, 'cart', total=cart_total), callback_data='cart')
     )
     markup.add(
-        InlineKeyboardButton('🆘 Support', callback_data='support_menu'),
-        InlineKeyboardButton('🎯 Recommendations', callback_data='recommendations_menu')
+        InlineKeyboardButton(get_text(user_language, 'orders'), callback_data='orders'),
+        InlineKeyboardButton(get_text(user_language, 'wishlist'), callback_data='wishlist')
     )
     markup.add(
-        InlineKeyboardButton('📰 Updates', callback_data='updates'),
-        InlineKeyboardButton('🔑 PGP Key', callback_data='pgp')
+        InlineKeyboardButton(get_text(user_language, 'support'), callback_data='support_menu'),
+        InlineKeyboardButton(get_text(user_language, 'recommendations'), callback_data='recommendations_menu')
     )
     markup.add(
-        InlineKeyboardButton('🔄 Restart Session', callback_data='restart_session')
+        InlineKeyboardButton(get_text(user_language, 'updates'), callback_data='updates'),
+        InlineKeyboardButton(get_text(user_language, 'pgp_key'), callback_data='pgp')
+    )
+    markup.add(
+        InlineKeyboardButton('🌐 Language', callback_data='language_selection')
+    )
+    markup.add(
+        InlineKeyboardButton(get_text(user_language, 'restart_session'), callback_data='restart_session')
     )
     return markup
 
-def create_country_menu():
-    markup = InlineKeyboardMarkup(row_width=1)
-    markup.add(InlineKeyboardButton('🇩🇪 GER - WW', callback_data='country_GER'))
-    markup.add(InlineKeyboardButton('🇦🇺 AUS - AUS', callback_data='country_AUS'))
-    markup.add(InlineKeyboardButton('🇺🇸 USA - USA', callback_data='country_USA'))
+def create_language_menu():
+    """Create language selection menu"""
+    markup = InlineKeyboardMarkup(row_width=2)
+    languages = get_available_languages()
+    
+    for code, name, flag in languages:
+        markup.add(InlineKeyboardButton(f'{flag} {name}', callback_data=f'lang_{code}'))
+    
     markup.add(InlineKeyboardButton('🔙 Back to main menu', callback_data='back'))
-    markup.add(InlineKeyboardButton('🔄 Restart Session', callback_data='restart_session'))
     return markup
 
-def create_categories_menu(categories):
+def create_country_menu(user_language='EN'):
     markup = InlineKeyboardMarkup(row_width=1)
-    markup.add(InlineKeyboardButton('↩️ Back to main menu', callback_data='back'))
+    markup.add(InlineKeyboardButton(get_text(user_language, 'country_ger'), callback_data='country_GER'))
+    markup.add(InlineKeyboardButton(get_text(user_language, 'country_aus'), callback_data='country_AUS'))
+    markup.add(InlineKeyboardButton(get_text(user_language, 'country_usa'), callback_data='country_USA'))
+    markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_main'), callback_data='back'))
+    markup.add(InlineKeyboardButton(get_text(user_language, 'restart_session'), callback_data='restart_session'))
+    return markup
+
+def create_categories_menu(categories, user_language='EN'):
+    markup = InlineKeyboardMarkup(row_width=1)
+    markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_main'), callback_data='back'))
     for category in categories:
         markup.add(InlineKeyboardButton(category['name'], callback_data=f"category_{category['name']}"))
-    markup.add(InlineKeyboardButton('🔄 Restart Session', callback_data='restart_session'))
+    markup.add(InlineKeyboardButton(get_text(user_language, 'restart_session'), callback_data='restart_session'))
     return markup
 
 def create_product_menu(category_name, categories):
@@ -438,6 +479,7 @@ def create_delivery_menu(user_country):
 
 def create_user_dashboard(user_id, user_carts, shop_info):
     """Create user dashboard menu"""
+    user_language = get_user_language(user_id)
     cart_total = sum(item['price'] for item in user_carts.get(user_id, []))
     cart_items = len(user_carts.get(user_id, []))
     
@@ -456,7 +498,7 @@ def create_user_dashboard(user_id, user_carts, shop_info):
     total_spent = sum(float(order['total_amount']) for order in user_orders)
     
     dashboard_text = f"""
-👤 **My Account Dashboard**
+👤 **{get_text(user_language, 'my_account')} Dashboard**
 
 **📊 Account Summary:**
 • Member Since: {user_data['join_date'][:10] if user_data else 'Unknown'}
@@ -652,6 +694,7 @@ CEO {shop_info['contact']['ceo']}
             user_states[user_id] = {'waiting_for_user_phrase_setup': True}
             save_user_state(user_id, user_states[user_id])
             
+            user_language = get_user_language(user_id)
             phrase_text = f"""
 🔐 **Set Your Secret Phrase Code**
 
@@ -675,31 +718,34 @@ Just type your secret phrase code and send it to this chat.
             
             bot.send_message(message.chat.id, phrase_text, parse_mode='Markdown')
 
-    @bot.callback_query_handler(func=lambda call: call.data in ['products', 'about', 'pgp', 'cart', 'orders', 'updates', 'back', 'checkout', 'payment_sent', 'order_no', 'order_yes', 'order_confirm', 'order_cancel', 'order_paid', 'discount_code', 'select_payment', 'enter_address', 'select_delivery', 'delete_order', 'tracking_info', 'restart_session', 'support_menu', 'recommendations_menu', 'user_dashboard', 'advanced_search', 'wishlist', 'order_history', 'user_settings', 'security_settings', 'user_analytics', 'user_preferences', 'search_products', 'search_by_category', 'search_by_price', 'search_sort', 'search_trending', 'search_new', 'price_alerts', 'share_wishlist'] or 
+    @bot.callback_query_handler(func=lambda call: call.data in ['products', 'about', 'pgp', 'cart', 'orders', 'updates', 'back', 'checkout', 'payment_sent', 'order_no', 'order_yes', 'order_confirm', 'order_cancel', 'order_paid', 'discount_code', 'select_payment', 'enter_address', 'select_delivery', 'delete_order', 'tracking_info', 'restart_session', 'support_menu', 'recommendations_menu', 'user_dashboard', 'advanced_search', 'wishlist', 'order_history', 'user_settings', 'security_settings', 'user_analytics', 'user_preferences', 'search_products', 'search_by_category', 'search_by_price', 'search_sort', 'search_trending', 'search_new', 'price_alerts', 'share_wishlist', 'show_rating', 'language_selection'] or 
                                 call.data.startswith('country_') or call.data.startswith('category_') or 
                                 call.data.startswith('add_') or call.data.startswith('remove_') or 
                                 call.data.startswith('test_verify_') or call.data.startswith('qty_') or
                                 call.data.startswith('delivery_') or call.data.startswith('payment_') or
-                                call.data.startswith('recommendations_') or call.data.startswith('wishlist_'))
+                                call.data.startswith('recommendations_') or call.data.startswith('wishlist_') or
+                                call.data.startswith('lang_'))
     def user_callback_handler(call):
         user_id = call.from_user.id
         if user_id not in user_states:
             user_states[user_id] = {'country': None, 'pgp_state': None, 'pgp_challenge': None}
         
         if call.data == 'products':
+            user_language = get_user_language(user_id)
             if not user_states[user_id]['country']:
-                country_text = "Available countries:\nPlease select your country to view products."
-                safe_edit_message(bot, call.message.chat.id, call.message.message_id, country_text, reply_markup=create_country_menu())
+                country_text = f"{get_text(user_language, 'available_countries')}:\nPlease select your country to view products."
+                safe_edit_message(bot, call.message.chat.id, call.message.message_id, country_text, reply_markup=create_country_menu(user_language))
             else:
-                categories_text = f"Available categories:"
-                safe_edit_message(bot, call.message.chat.id, call.message.message_id, categories_text, reply_markup=create_categories_menu(categories))
+                categories_text = f"{get_text(user_language, 'available_countries')}:"
+                safe_edit_message(bot, call.message.chat.id, call.message.message_id, categories_text, reply_markup=create_categories_menu(categories, user_language))
         elif call.data.startswith('country_'):
             country = call.data.split('_')[1]
             user_states[user_id]['country'] = country
-            bot.answer_callback_query(call.id, f"Selected country: {country}")
+            user_language = get_user_language(user_id)
+            bot.answer_callback_query(call.id, get_text(user_language, 'selected_country', country=country))
             # Proceed to categories
-            categories_text = f"Available categories:"
-            safe_edit_message(bot, call.message.chat.id, call.message.message_id, categories_text, reply_markup=create_categories_menu(categories))
+            categories_text = f"{get_text(user_language, 'available_countries')}:"
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, categories_text, reply_markup=create_categories_menu(categories, user_language))
         elif call.data.startswith('category_'):
             category_name = call.data.split('_', 1)[1]
             # Find the category
@@ -746,45 +792,48 @@ Just type your secret phrase code and send it to this chat.
                 user_entries = [u for u in users_data['users'] if u['user_id'] == user_id]
                 order_number = user_entries[-1]['order_number'] if user_entries else 1
                 
+                user_language = get_user_language(user_id)
                 welcome_text = f"""
-🌍 {shop_info['name']} 📦 🌏 ✈️
+{get_text(user_language, 'welcome_title', shop_name=shop_info['name'])}
+{get_text(user_language, 'overall_rating')}
 
-Currency: {shop_info['currency'].lower()}
-Payments: {' '.join(shop_info['payment_methods'])}
+{get_text(user_language, 'currency', currency=shop_info['currency'].lower())}
+{get_text(user_language, 'payments', payment_methods=' '.join(shop_info['payment_methods']))}
 
-👤 <b>Welcome back, {first_name}!</b>
+{get_text(user_language, 'welcome_back', first_name=first_name)}
 
-Available countries:
+{get_text(user_language, 'available_countries')}
 
-🇩🇪 GER - 🌍 WW
+{get_text(user_language, 'country_ger')}
 
-🇦🇺 AUS - 🇦🇺 AUS
+{get_text(user_language, 'country_aus')}
 
-🇺🇸 USA - 🇺🇸 USA
+{get_text(user_language, 'country_usa')}
 
-The store owner Mr Worldwide
-Powered by The Engineer
+{get_text(user_language, 'store_owner')}
+{get_text(user_language, 'powered_by')}
 
-✨ {shop_info['promotion']} ✨
-"PLEASE READ 'Show About' BEFORE"
+{get_text(user_language, 'promotion', promotion_text=shop_info['promotion'])}
+{get_text(user_language, 'read_about')}
 
-✅ Premium quality &amp; best prices
-✅ Ninja packaging
-✅ Worldwide shipping
+{get_text(user_language, 'premium_quality')}
+{get_text(user_language, 'ninja_packaging')}
+{get_text(user_language, 'worldwide_shipping')}
 
-📦 WE SHIP:
-[🇪🇺 EUROPE] [🇦🇺 AUS] [🇺🇸 USA]
+{get_text(user_language, 'we_ship')}
+{get_text(user_language, 'shipping_europe')} {get_text(user_language, 'shipping_aus')} {get_text(user_language, 'shipping_usa')}
 
-📞 Telegram for all latest updates
+{get_text(user_language, 'telegram_updates')}
 {shop_info['contact']['telegram_bot']} &amp; {shop_info['contact']['updates_channel']}
 
-CEO {shop_info['contact']['ceo']}
+{get_text(user_language, 'ceo', ceo=shop_info['contact']['ceo'])}
                 """.strip()
                 safe_edit_message(bot, call.message.chat.id, call.message.message_id, welcome_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='HTML')
         elif call.data == 'pgp':
+            user_language = get_user_language(user_id)
             if gpg is None:
-                pgp_text = """
-🔑 **Verify PGP Key**
+                pgp_text = f"""
+🔑 **{get_text(user_language, 'pgp_key')}**
 
 ⚠️ PGP functionality is currently disabled.
 
@@ -796,7 +845,7 @@ To enable PGP features:
 For now, you can verify our authenticity through our official channels.
                 """.strip()
                 markup = InlineKeyboardMarkup()
-                markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+                markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_menu'), callback_data='back'))
                 safe_edit_message(bot, call.message.chat.id, call.message.message_id, pgp_text, reply_markup=markup, parse_mode='Markdown')
             else:
                 # Sign a test message
@@ -834,16 +883,18 @@ Use GPG to verify offline, or test here.
             cart_markup, total = create_cart_menu(user_id, user_carts)
             cart = user_carts.get(user_id, [])
             
+            user_language = get_user_language(user_id)
             if cart:
-                cart_text = "🛒 **Your cart:**\n\n"
+                cart_text = f"🛒 **{get_text(user_language, 'cart', total=total)}:**\n\n"
                 for i, item in enumerate(cart, 1):
                     cart_text += f"{i} • {item['name']} • {item['price']:.1f} eur\n"
                 cart_text += f"\n📋 **Total amount: {total:.2f} eur**"
             else:
-                cart_text = "🛒 **Your cart:**\n\nYour cart is empty."
+                cart_text = f"🛒 **{get_text(user_language, 'cart', total=0)}:**\n\nYour cart is empty."
             
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, cart_text, reply_markup=cart_markup, parse_mode='Markdown')
         elif call.data == 'checkout':
+            user_language = get_user_language(user_id)
             print(f"Checkout callback received from user {user_id}")
             total = sum(item['price'] for item in user_carts.get(user_id, []))
             print(f"Cart total: {total}")
@@ -861,10 +912,10 @@ Use GPG to verify offline, or test here.
 
 Your secret phrase: {secret_phrase}
 
-**Invoice #{user_id}**
-Status: 🕒 Pending Checkout
+**{get_text(user_language, 'invoice', invoice_id=user_id)}**
+{get_text(user_language, 'status_pending')}
 
-Enter the discount code, payment method, address and delivery method. Once your order has been completed, you will be given payment details.
+{get_text(user_language, 'enter_details')}
 
 """
                 # Add cart items
@@ -882,18 +933,18 @@ Enter the discount code, payment method, address and delivery method. Once your 
                 
                 # Create structured checkout buttons
                 markup = InlineKeyboardMarkup(row_width=1)
-                markup.add(InlineKeyboardButton('Enter a discount code', callback_data='discount_code'))
-                markup.add(InlineKeyboardButton('Select Payment Method', callback_data='select_payment'))
-                markup.add(InlineKeyboardButton('Enter Delivery Address', callback_data='enter_address'))
-                markup.add(InlineKeyboardButton('Select Delivery Method', callback_data='select_delivery'))
+                markup.add(InlineKeyboardButton(get_text(user_language, 'discount_code'), callback_data='discount_code'))
+                markup.add(InlineKeyboardButton(get_text(user_language, 'payment_method'), callback_data='select_payment'))
+                markup.add(InlineKeyboardButton(get_text(user_language, 'enter_address'), callback_data='enter_address'))
+                markup.add(InlineKeyboardButton(get_text(user_language, 'select_delivery'), callback_data='select_delivery'))
                 markup.add(InlineKeyboardButton('📦 Tracking Information', callback_data='tracking_info'))
                 markup.add(InlineKeyboardButton('Delete Order', callback_data='delete_order'))
-                markup.add(InlineKeyboardButton('Back', callback_data='back'))
+                markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_main'), callback_data='back'))
                 
                 safe_edit_message(bot, call.message.chat.id, call.message.message_id, invoice_text, reply_markup=markup, parse_mode='Markdown')
                 print("Structured checkout invoice sent")
             else:
-                bot.answer_callback_query(call.id, "Your cart is empty!")
+                bot.answer_callback_query(call.id, get_text(user_language, 'cart_empty'))
         elif call.data.startswith('delivery_'):
             # Handle delivery method selection
             print(f"Delivery callback received: {call.data}")
@@ -941,6 +992,7 @@ Select your payment method:
                 bot.answer_callback_query(call.id, "Tracking numbers are not given out until 3 working days after purchase.", show_alert=True)
         
         elif call.data == 'payment_btc':
+            user_language = get_user_language(user_id)
             # Handle Bitcoin payment selection - go to address collection first
             if user_id not in user_states:
                 user_states[user_id] = {}
@@ -1293,8 +1345,9 @@ Thank you for your order! 🚀
             user_carts[user_id] = []
         
         elif call.data == 'orders':
-            orders_text = """
-📦 **Orders**
+            user_language = get_user_language(user_id)
+            orders_text = f"""
+📦 **{get_text(user_language, 'orders')}**
 
 Your recent orders:
 • Order #123 - Delivered (USA)
@@ -1303,29 +1356,79 @@ Your recent orders:
 Enter order ID to track: /track <ID>
             """.strip()
             markup = InlineKeyboardMarkup()
-            markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+            markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_menu'), callback_data='back'))
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, orders_text, reply_markup=markup, parse_mode='Markdown')
         elif call.data == 'updates':
-            updates_text = """
-📰 **NWW Updates**
+            user_language = get_user_language(user_id)
+            updates_text = f"""
+📰 **{get_text(user_language, 'updates')}**
 
 Latest: 20% promo extended! New products incoming 🚀
 Follow @NWWupdates for more.
             """.strip()
             markup = InlineKeyboardMarkup()
-            markup.add(InlineKeyboardButton('🔙 Back to Menu', callback_data='back'))
+            markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_menu'), callback_data='back'))
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, updates_text, reply_markup=markup, parse_mode='Markdown')
         elif call.data == 'back':
-            safe_edit_message(bot, call.message.chat.id, call.message.message_id, "Back to main menu.", reply_markup=create_main_menu(user_id, user_carts, shop_info))
+            user_language = get_user_language(user_id)
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, get_text(user_language, 'back_to_main'), reply_markup=create_main_menu(user_id, user_carts, shop_info))
+        elif call.data == 'show_rating':
+            user_language = get_user_language(user_id)
+            rating_text = f"""
+{get_text(user_language, 'rating_title')}
+
+{get_text(user_language, 'customer_reviews')}
+
+{get_text(user_language, 'quality_rating')}
+{get_text(user_language, 'delivery_rating')}
+{get_text(user_language, 'packaging_rating')}
+{get_text(user_language, 'communication_rating')}
+{get_text(user_language, 'value_rating')}
+
+{get_text(user_language, 'based_on_reviews')}
+
+{get_text(user_language, 'recent_reviews')}
+{get_text(user_language, 'review_1')}
+{get_text(user_language, 'review_2')}
+{get_text(user_language, 'review_3')}
+
+{get_text(user_language, 'why_customers_love')}
+{get_text(user_language, 'premium_products')}
+{get_text(user_language, 'ninja_packaging_desc')}
+{get_text(user_language, 'worldwide_shipping_desc')}
+{get_text(user_language, 'customer_support')}
+{get_text(user_language, 'crypto_payments')}
+
+{get_text(user_language, 'thank_you')}
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_menu'), callback_data='back'))
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, rating_text, reply_markup=markup, parse_mode='Markdown')
+        elif call.data == 'language_selection':
+            user_language = get_user_language(user_id)
+            language_text = get_text(user_language, 'select_language')
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, language_text, reply_markup=create_language_menu())
+        elif call.data.startswith('lang_'):
+            language_code = call.data.split('_')[1]
+            if update_user_language(user_id, language_code):
+                user_language = get_user_language(user_id)
+                language_name = get_text(language_code, 'name')
+                bot.answer_callback_query(call.id, get_text(user_language, 'language_set', lang_name=language_name))
+                # Show updated main menu with new language
+                safe_edit_message(bot, call.message.chat.id, call.message.message_id, get_text(user_language, 'language_set', lang_name=language_name), reply_markup=create_main_menu(user_id, user_carts, shop_info))
+            else:
+                bot.answer_callback_query(call.id, get_text('EN', 'invalid_language'))
         elif call.data == 'restart_session':
             # Clear user state and cart
             user_states[user_id] = {'country': None, 'pgp_state': None, 'pgp_challenge': None}
             if user_id in user_carts:
                 user_carts[user_id] = []
             
+            user_language = get_user_language(user_id)
             # Show restart confirmation
-            restart_text = """
-🔄 **Session Restarted**
+            restart_text = f"""
+🔄 **{get_text(user_language, 'restart_session')}**
 
 Your session has been successfully restarted!
 
@@ -1336,11 +1439,12 @@ Your session has been successfully restarted!
 You can now start fresh with a new session.
             """.strip()
             
-            bot.answer_callback_query(call.id, "Session restarted successfully!")
+            bot.answer_callback_query(call.id, get_text(user_language, 'session_restarted'))
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, restart_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='Markdown')
         elif call.data == 'support_menu':
-            support_text = """
-🆘 **Customer Support**
+            user_language = get_user_language(user_id)
+            support_text = f"""
+🆘 **{get_text(user_language, 'support')}**
 
 How can we help you today?
 
@@ -1366,8 +1470,9 @@ Choose an option below or just type your question!
             
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, support_text, reply_markup=markup, parse_mode='Markdown')
         elif call.data == 'recommendations_menu':
-            recommendations_text = """
-🎯 **Smart Recommendations**
+            user_language = get_user_language(user_id)
+            recommendations_text = f"""
+🎯 **{get_text(user_language, 'recommendations')}**
 
 Discover products tailored just for you!
 
@@ -2065,41 +2170,43 @@ Please create a shorter secret phrase code and try again.
             save_user_state(user_id, user_states[user_id])
             
             # Show welcome message with their secret phrase code
+            user_language = get_user_language(user_id)
             welcome_text = f"""
-🌍 {shop_info['name']} 📦 🌏 ✈️
+{get_text(user_language, 'welcome_title', shop_name=shop_info['name'])}
+{get_text(user_language, 'overall_rating')}
 
-Currency: {shop_info['currency'].lower()}
-Payments: {' '.join(shop_info['payment_methods'])}
+{get_text(user_language, 'currency', currency=shop_info['currency'].lower())}
+{get_text(user_language, 'payments', payment_methods=' '.join(shop_info['payment_methods']))}
 
-👤 <b>Welcome, {message.from_user.first_name or 'User'}!</b>
+{get_text(user_language, 'welcome_user', first_name=message.from_user.first_name or 'User')}
 
-**Your secret phrase code:** {secret_phrase}
+{get_text(user_language, 'secret_phrase', phrase=secret_phrase)}
 
-Available countries:
+{get_text(user_language, 'available_countries')}
 
-🇩🇪 GER - 🌍 WW
+{get_text(user_language, 'country_ger')}
 
-🇦🇺 AUS - 🇦🇺 AUS
+{get_text(user_language, 'country_aus')}
 
-🇺🇸 USA - 🇺🇸 USA
+{get_text(user_language, 'country_usa')}
 
-The store owner Mr Worldwide
-Powered by The Engineer
+{get_text(user_language, 'store_owner')}
+{get_text(user_language, 'powered_by')}
 
-✨ {shop_info['promotion']} ✨
-"PLEASE READ 'Show About' BEFORE"
+{get_text(user_language, 'promotion', promotion_text=shop_info['promotion'])}
+{get_text(user_language, 'read_about')}
 
-✅ Premium quality &amp; best prices
-✅ Ninja packaging
-✅ Worldwide shipping
+{get_text(user_language, 'premium_quality')}
+{get_text(user_language, 'ninja_packaging')}
+{get_text(user_language, 'worldwide_shipping')}
 
-📦 WE SHIP:
-[🇪🇺 EUROPE] [🇦🇺 AUS] [🇺🇸 USA]
+{get_text(user_language, 'we_ship')}
+{get_text(user_language, 'shipping_europe')} {get_text(user_language, 'shipping_aus')} {get_text(user_language, 'shipping_usa')}
 
-📞 Telegram for all latest updates
+{get_text(user_language, 'telegram_updates')}
 {shop_info['contact']['telegram_bot']} &amp; {shop_info['contact']['updates_channel']}
 
-CEO {shop_info['contact']['ceo']}
+{get_text(user_language, 'ceo', ceo=shop_info['contact']['ceo'])}
             """.strip()
             
             bot.reply_to(message, welcome_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='HTML')
