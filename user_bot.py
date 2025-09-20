@@ -2423,9 +2423,7 @@ After sending, click "Payment Sent" to provide your delivery address.
             
             if phrase_code == correct_phrase:
                 # Phrase code is correct, verify user and show welcome
-                user_data = get_or_create_user(user_id, message.from_user.username or "", 
-                                             message.from_user.first_name or "", 
-                                             message.from_user.last_name or "")
+                # User data already exists from above, just mark as verified
                 
                 # Mark user as phrase verified
                 users_data = load_users()

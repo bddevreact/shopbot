@@ -11,118 +11,6 @@
       "language": "GER"
     },
     {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:24:46.476227",
-      "order_number": 2
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:25:34.316719",
-      "order_number": 3
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:29:58.897238",
-      "order_number": 4
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:41:23.845663",
-      "order_number": 5
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:45:34.003013",
-      "order_number": 6
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:47:07.066051",
-      "order_number": 7
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:47:42.513533",
-      "order_number": 8
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:50:40.439666",
-      "order_number": 9
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:50:59.152799",
-      "order_number": 10
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:52:03.013322",
-      "order_number": 11
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:52:53.417883",
-      "order_number": 12
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T05:53:38.501297",
-      "order_number": 13
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T06:06:45.142602",
-      "order_number": 14
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T06:13:18.003504",
-      "order_number": 15
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T06:15:25.521115",
-      "order_number": 16
-    },
-    {
-      "user_id": 6251161332,
-      "username": "mushfiqmoon",
-      "full_name": "Md Moshfiqur Rahaman",
-      "join_date": "2025-09-18T06:16:24.233810",
-      "order_number": 17
-    },
-    {
       "user_id": 5454537714,
       "username": "Pythonsavy",
       "full_name": "Oracle Savy 🤖🧠 Bot Tactician",
@@ -153,6 +41,6 @@
   ],
   "user_counter": 21,
   "statistics": {
-    "total_users": 21
+    "total_users": 5
   }
 }
