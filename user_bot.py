@@ -2548,7 +2548,7 @@ After sending, click "Payment Sent" to provide your delivery address.
             user_states[user_id]['waiting_for_user_phrase_setup'] = False
             save_user_state(user_id, user_states[user_id])
             
-            # Show success message
+            # Show success message with main menu
             success_text = f"""
 ✅ **{get_text(user_language, 'secret_phrase_set')}**
 
@@ -2559,7 +2559,7 @@ After sending, click "Payment Sent" to provide your delivery address.
 {get_text(user_language, 'phrase_instructions')}
             """.strip()
             
-            bot.reply_to(message, success_text, parse_mode='Markdown')
+            bot.reply_to(message, success_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='Markdown')
             return
         
         # Handle discount code submission
