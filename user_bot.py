@@ -333,6 +333,69 @@ def get_user_language(user_id):
             return user.get('language', 'EN')
     return 'EN'  # Default to English
 
+def get_welcome_message(user_id, shop_info, first_name="User", personal_code="Not set"):
+    """Get welcome message - either custom or default"""
+    welcome_config = shop_info.get('welcome_message', {})
+    
+    # Check if custom welcome message is enabled and configured
+    if (welcome_config.get('enabled', True) and 
+        not welcome_config.get('use_default', True) and 
+        welcome_config.get('custom_message')):
+        
+        # Use custom message with variable substitution
+        custom_message = welcome_config['custom_message']
+        return custom_message.format(
+            shop_name=shop_info['name'],
+            currency=shop_info['currency'].lower(),
+            payment_methods=' '.join(shop_info['payment_methods']),
+            first_name=first_name,
+            personal_code=personal_code,
+            promotion=shop_info['promotion'],
+            telegram_bot=shop_info['contact']['telegram_bot'],
+            updates_channel=shop_info['contact']['updates_channel'],
+            ceo=shop_info['contact']['ceo']
+        )
+    
+    # Use default welcome message
+    user_language = get_user_language(user_id)
+    return f"""
+{get_text(user_language, 'welcome_title', shop_name=shop_info['name'])}
+{get_text(user_language, 'overall_rating')}
+
+{get_text(user_language, 'currency', currency=shop_info['currency'].lower())}
+{get_text(user_language, 'payments', payment_methods=' '.join(shop_info['payment_methods']))}
+
+{get_text(user_language, 'welcome_user', first_name=first_name)}
+
+{get_text(user_language, 'secret_phrase', phrase=personal_code)}
+
+{get_text(user_language, 'available_countries')}
+
+{get_text(user_language, 'country_ger')}
+
+{get_text(user_language, 'country_aus')}
+
+{get_text(user_language, 'country_usa')}
+
+{get_text(user_language, 'store_owner')}
+{get_text(user_language, 'powered_by')}
+
+{get_text(user_language, 'promotion', promotion_text=shop_info['promotion'])}
+{get_text(user_language, 'read_about')}
+
+{get_text(user_language, 'premium_quality')}
+{get_text(user_language, 'ninja_packaging')}
+{get_text(user_language, 'worldwide_shipping')}
+
+{get_text(user_language, 'we_ship')}
+{get_text(user_language, 'shipping_europe')} {get_text(user_language, 'shipping_aus')} {get_text(user_language, 'shipping_usa')}
+
+{get_text(user_language, 'telegram_updates')}
+{shop_info['contact']['telegram_bot']} &amp; {shop_info['contact']['updates_channel']}
+
+{get_text(user_language, 'ceo', ceo=shop_info['contact']['ceo'])}
+    """.strip()
+
 def update_user_language(user_id, language_code):
     """Update user's preferred language"""
     if not is_valid_language(language_code):
@@ -652,42 +715,7 @@ def setup_user_handlers(bot, categories, shop_info, user_carts, user_states, gpg
             # User has personal phrase code, show it
             user_states[user_id] = {'country': None, 'pgp_state': None, 'pgp_challenge': None}
             
-            welcome_text = f"""
-🌍 {shop_info['name']} 📦 🌏 ✈️
-
-Currency: {shop_info['currency'].lower()}
-Payments: {' '.join(shop_info['payment_methods'])}
-
-👤 <b>Welcome back, {first_name}!</b>
-
-**Your secret phrase code:** {user_data['personal_phrase_code']}
-
-Available countries:
-
-🇩🇪 GER - 🌍 WW
-
-🇦🇺 AUS - 🇦🇺 AUS
-
-🇺🇸 USA - 🇺🇸 USA
-
-The store owner Mr Worldwide
-Powered by The Engineer
-
-✨ {shop_info['promotion']} ✨
-"PLEASE READ 'Show About' BEFORE"
-
-✅ Premium quality &amp; best prices
-✅ Ninja packaging
-✅ Worldwide shipping
-
-📦 WE SHIP:
-[🇪🇺 EUROPE] [🇦🇺 AUS] [🇺🇸 USA]
-
-📞 Telegram for all latest updates
-{shop_info['contact']['telegram_bot']} &amp; {shop_info['contact']['updates_channel']}
-
-CEO {shop_info['contact']['ceo']}
-            """.strip()
+            welcome_text = get_welcome_message(user_id, shop_info, first_name, user_data['personal_phrase_code'])
             bot.send_message(message.chat.id, welcome_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='HTML')
         else:
             # User doesn't have personal phrase code, ask them to set one
@@ -792,42 +820,7 @@ Just type your secret phrase code and send it to this chat.
                 user_entries = [u for u in users_data['users'] if u['user_id'] == user_id]
                 order_number = user_entries[-1]['order_number'] if user_entries else 1
                 
-                user_language = get_user_language(user_id)
-                welcome_text = f"""
-{get_text(user_language, 'welcome_title', shop_name=shop_info['name'])}
-{get_text(user_language, 'overall_rating')}
-
-{get_text(user_language, 'currency', currency=shop_info['currency'].lower())}
-{get_text(user_language, 'payments', payment_methods=' '.join(shop_info['payment_methods']))}
-
-{get_text(user_language, 'welcome_back', first_name=first_name)}
-
-{get_text(user_language, 'available_countries')}
-
-{get_text(user_language, 'country_ger')}
-
-{get_text(user_language, 'country_aus')}
-
-{get_text(user_language, 'country_usa')}
-
-{get_text(user_language, 'store_owner')}
-{get_text(user_language, 'powered_by')}
-
-{get_text(user_language, 'promotion', promotion_text=shop_info['promotion'])}
-{get_text(user_language, 'read_about')}
-
-{get_text(user_language, 'premium_quality')}
-{get_text(user_language, 'ninja_packaging')}
-{get_text(user_language, 'worldwide_shipping')}
-
-{get_text(user_language, 'we_ship')}
-{get_text(user_language, 'shipping_europe')} {get_text(user_language, 'shipping_aus')} {get_text(user_language, 'shipping_usa')}
-
-{get_text(user_language, 'telegram_updates')}
-{shop_info['contact']['telegram_bot']} &amp; {shop_info['contact']['updates_channel']}
-
-{get_text(user_language, 'ceo', ceo=shop_info['contact']['ceo'])}
-                """.strip()
+                welcome_text = get_welcome_message(user_id, shop_info, first_name, personal_code)
                 safe_edit_message(bot, call.message.chat.id, call.message.message_id, welcome_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='HTML')
         elif call.data == 'pgp':
             user_language = get_user_language(user_id)
@@ -2294,44 +2287,7 @@ Please create a shorter secret phrase code and try again.
             save_user_state(user_id, user_states[user_id])
             
             # Show welcome message with their secret phrase code
-            user_language = get_user_language(user_id)
-            welcome_text = f"""
-{get_text(user_language, 'welcome_title', shop_name=shop_info['name'])}
-{get_text(user_language, 'overall_rating')}
-
-{get_text(user_language, 'currency', currency=shop_info['currency'].lower())}
-{get_text(user_language, 'payments', payment_methods=' '.join(shop_info['payment_methods']))}
-
-{get_text(user_language, 'welcome_user', first_name=message.from_user.first_name or 'User')}
-
-{get_text(user_language, 'secret_phrase', phrase=secret_phrase)}
-
-{get_text(user_language, 'available_countries')}
-
-{get_text(user_language, 'country_ger')}
-
-{get_text(user_language, 'country_aus')}
-
-{get_text(user_language, 'country_usa')}
-
-{get_text(user_language, 'store_owner')}
-{get_text(user_language, 'powered_by')}
-
-{get_text(user_language, 'promotion', promotion_text=shop_info['promotion'])}
-{get_text(user_language, 'read_about')}
-
-{get_text(user_language, 'premium_quality')}
-{get_text(user_language, 'ninja_packaging')}
-{get_text(user_language, 'worldwide_shipping')}
-
-{get_text(user_language, 'we_ship')}
-{get_text(user_language, 'shipping_europe')} {get_text(user_language, 'shipping_aus')} {get_text(user_language, 'shipping_usa')}
-
-{get_text(user_language, 'telegram_updates')}
-{shop_info['contact']['telegram_bot']} &amp; {shop_info['contact']['updates_channel']}
-
-{get_text(user_language, 'ceo', ceo=shop_info['contact']['ceo'])}
-            """.strip()
+            welcome_text = get_welcome_message(user_id, shop_info, message.from_user.first_name or 'User', secret_phrase)
             
             bot.reply_to(message, welcome_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='HTML')
             return
@@ -2563,44 +2519,7 @@ After sending, click "Payment Sent" to provide your delivery address.
                 
                 # Show welcome message with personal phrase code
                 personal_code = user_data.get('personal_phrase_code', 'Not set')
-                user_language = get_user_language(user_id)
-                welcome_text = f"""
-{get_text(user_language, 'welcome_title', shop_name=shop_info['name'])}
-{get_text(user_language, 'overall_rating')}
-
-{get_text(user_language, 'currency', currency=shop_info['currency'].lower())}
-{get_text(user_language, 'payments', payment_methods=' '.join(shop_info['payment_methods']))}
-
-{get_text(user_language, 'welcome_user', first_name=message.from_user.first_name or 'User')}
-
-{get_text(user_language, 'secret_phrase', phrase=personal_code)}
-
-{get_text(user_language, 'available_countries')}
-
-{get_text(user_language, 'country_ger')}
-
-{get_text(user_language, 'country_aus')}
-
-{get_text(user_language, 'country_usa')}
-
-{get_text(user_language, 'store_owner')}
-{get_text(user_language, 'powered_by')}
-
-{get_text(user_language, 'promotion', promotion_text=shop_info['promotion'])}
-{get_text(user_language, 'read_about')}
-
-{get_text(user_language, 'premium_quality')}
-{get_text(user_language, 'ninja_packaging')}
-{get_text(user_language, 'worldwide_shipping')}
-
-{get_text(user_language, 'we_ship')}
-{get_text(user_language, 'shipping_europe')} {get_text(user_language, 'shipping_aus')} {get_text(user_language, 'shipping_usa')}
-
-{get_text(user_language, 'telegram_updates')}
-{shop_info['contact']['telegram_bot']} &amp; {shop_info['contact']['updates_channel']}
-
-{get_text(user_language, 'ceo', ceo=shop_info['contact']['ceo'])}
-                """.strip()
+                welcome_text = get_welcome_message(user_id, shop_info, message.from_user.first_name or 'User', personal_code)
                 
                 bot.reply_to(message, welcome_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='HTML')
             else:

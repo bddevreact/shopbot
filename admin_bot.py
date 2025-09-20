@@ -161,6 +161,9 @@ def create_admin_management_menu():
         InlineKeyboardButton('💾 Create Backup', callback_data='admin_backup')
     )
     markup.add(
+        InlineKeyboardButton('👋 Welcome Message', callback_data='admin_welcome_message')
+    )
+    markup.add(
         InlineKeyboardButton('🔄 Reload Data', callback_data='admin_reload'),
         InlineKeyboardButton('🔙 Back to Main', callback_data='admin_back_main')
     )
@@ -546,6 +549,185 @@ Use /admin_shop_edit to modify shop settings.
             markup = InlineKeyboardMarkup()
             markup.add(InlineKeyboardButton('🔙 Back to Admin', callback_data='admin_back_management'))
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, shop_text, 
+                                reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'admin_welcome_message':
+            welcome_config = shop_info.get('welcome_message', {})
+            is_enabled = welcome_config.get('enabled', True)
+            use_default = welcome_config.get('use_default', True)
+            custom_message = welcome_config.get('custom_message', '')
+            last_updated = welcome_config.get('last_updated', 'Never')
+            
+            welcome_text = f"""
+👋 **Welcome Message Management**
+
+**Current Settings:**
+• **Status**: {'✅ Enabled' if is_enabled else '❌ Disabled'}
+• **Mode**: {'📝 Custom Message' if not use_default else '🔄 Default Message'}
+• **Last Updated**: {last_updated[:10] if last_updated != 'Never' else 'Never'}
+
+**Current Message:**
+{('📝 Custom: ' + custom_message[:100] + '...' if len(custom_message) > 100 else '📝 Custom: ' + custom_message) if custom_message and not use_default else '🔄 Using default welcome message'}
+
+**Available Actions:**
+• Edit custom welcome message
+• Toggle between custom/default
+• Enable/disable welcome message
+• Preview current message
+            """.strip()
+            
+            markup = InlineKeyboardMarkup(row_width=2)
+            markup.add(
+                InlineKeyboardButton('✏️ Edit Message', callback_data='admin_edit_welcome'),
+                InlineKeyboardButton('👁️ Preview', callback_data='admin_preview_welcome')
+            )
+            markup.add(
+                InlineKeyboardButton('🔄 Toggle Mode', callback_data='admin_toggle_welcome_mode'),
+                InlineKeyboardButton('✅ Toggle Status', callback_data='admin_toggle_welcome_status')
+            )
+            markup.add(InlineKeyboardButton('🔙 Back to Admin', callback_data='admin_back_management'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, welcome_text, 
+                                reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'admin_edit_welcome':
+            edit_text = """
+✏️ **Edit Welcome Message**
+
+Please send the new welcome message. You can use:
+• **Bold text** with **text**
+• *Italic text* with *text*
+• `Code text` with `text`
+• Line breaks for formatting
+
+**Current message will be replaced.**
+
+Send your new message now:
+            """.strip()
+            
+            # Set admin state to wait for welcome message
+            admin_states[user_id] = {'waiting_for_welcome_message': True}
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('❌ Cancel', callback_data='admin_welcome_message'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, edit_text, 
+                                reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'admin_preview_welcome':
+            welcome_config = shop_info.get('welcome_message', {})
+            use_default = welcome_config.get('use_default', True)
+            custom_message = welcome_config.get('custom_message', '')
+            
+            if use_default or not custom_message:
+                preview_text = """
+🔄 **Default Welcome Message Preview**
+
+This is how the default welcome message looks to users:
+
+🌍 Mr Zoidberg Shop 📦 🌏 ✈️
+⭐ Overall Rating: 4.9/5.0
+
+Currency: eur
+Payments: BTC XMR
+
+👤 Welcome, User!
+
+**Your secret phrase code:** Not set
+
+Available countries:
+
+🇩🇪 GER - 🌍 WW
+
+🇦🇺 AUS - 🇦🇺 AUS
+
+🇺🇸 USA - 🇺🇸 USA
+
+The store owner Mr Worldwide
+Powered by The Engineer
+
+✨ 20% EXTRA on your order promotion now LIVE! ✨
+"PLEASE READ 'Show About' BEFORE"
+
+✅ Premium quality & best prices
+✅ Ninja packaging
+✅ Worldwide shipping
+
+📦 WE SHIP:
+[🇪🇺 EUROPE] [🇦🇺 AUS] [🇺🇸 USA]
+
+📞 Telegram for all latest updates
+@The_Worldwide_shop_bot & @NWW_updates
+
+CEO @Mr_Worldwide
+                """.strip()
+            else:
+                preview_text = f"""
+📝 **Custom Welcome Message Preview**
+
+This is how your custom welcome message looks to users:
+
+{custom_message}
+                """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Welcome Management', callback_data='admin_welcome_message'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, preview_text, 
+                                reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'admin_toggle_welcome_mode':
+            welcome_config = shop_info.get('welcome_message', {})
+            current_mode = welcome_config.get('use_default', True)
+            new_mode = not current_mode
+            
+            # Update the configuration
+            welcome_config['use_default'] = new_mode
+            welcome_config['last_updated'] = datetime.datetime.now().isoformat()
+            shop_info['welcome_message'] = welcome_config
+            
+            # Save to file
+            save_categories_to_file(categories, shop_info)
+            
+            mode_text = f"""
+🔄 **Welcome Message Mode Changed**
+
+**New Mode**: {'📝 Custom Message' if not new_mode else '🔄 Default Message'}
+
+{'Now using your custom welcome message.' if not new_mode else 'Now using the default welcome message.'}
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Welcome Management', callback_data='admin_welcome_message'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, mode_text, 
+                                reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'admin_toggle_welcome_status':
+            welcome_config = shop_info.get('welcome_message', {})
+            current_status = welcome_config.get('enabled', True)
+            new_status = not current_status
+            
+            # Update the configuration
+            welcome_config['enabled'] = new_status
+            welcome_config['last_updated'] = datetime.datetime.now().isoformat()
+            shop_info['welcome_message'] = welcome_config
+            
+            # Save to file
+            save_categories_to_file(categories, shop_info)
+            
+            status_text = f"""
+✅ **Welcome Message Status Changed**
+
+**New Status**: {'✅ Enabled' if new_status else '❌ Disabled'}
+
+{'Welcome message is now active for new users.' if new_status else 'Welcome message is now disabled for new users.'}
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🔙 Back to Welcome Management', callback_data='admin_welcome_message'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, status_text, 
                                 reply_markup=markup, parse_mode='Markdown')
         
         elif call.data == 'admin_list_categories':
@@ -2083,6 +2265,47 @@ Type 'cancel' to abort editing.
         print(f"Admin message received from user {user_id}: {text}")
         print(f"Current admin states: {admin_states}")
         print(f"User state: {admin_states.get(user_id, 'No state')}")
+        
+        # Handle welcome message editing
+        if user_id in admin_states and admin_states[user_id].get('waiting_for_welcome_message'):
+            try:
+                # Update the welcome message
+                welcome_config = shop_info.get('welcome_message', {})
+                welcome_config['custom_message'] = text
+                welcome_config['use_default'] = False
+                welcome_config['last_updated'] = datetime.datetime.now().isoformat()
+                shop_info['welcome_message'] = welcome_config
+                
+                # Save to file
+                save_categories_to_file(categories, shop_info)
+                
+                # Clear admin state
+                admin_states[user_id] = {}
+                
+                success_text = f"""
+✅ **Welcome Message Updated Successfully!**
+
+**New Message Preview:**
+{text[:200]}{'...' if len(text) > 200 else ''}
+
+**Settings:**
+• Mode: 📝 Custom Message
+• Status: ✅ Enabled
+• Updated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+The new welcome message is now active for all new users.
+                """.strip()
+                
+                markup = InlineKeyboardMarkup()
+                markup.add(InlineKeyboardButton('👁️ Preview Full Message', callback_data='admin_preview_welcome'))
+                markup.add(InlineKeyboardButton('🔙 Back to Welcome Management', callback_data='admin_welcome_message'))
+                
+                bot.reply_to(message, success_text, reply_markup=markup, parse_mode='Markdown')
+                return
+                
+            except Exception as e:
+                bot.reply_to(message, f"❌ Error updating welcome message: {str(e)}")
+                return
         
         # Handle category creation
         if user_id in admin_states and admin_states[user_id].get('action') == 'add_category':

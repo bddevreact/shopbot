@@ -23,6 +23,12 @@
       "telegram_bot": "@The_Worldwide_shop_bot",
       "updates_channel": "@NWW_updates",
       "ceo": "@Mr_Worldwide"
+    },
+    "welcome_message": {
+      "enabled": true,
+      "custom_message": "",
+      "use_default": true,
+      "last_updated": "2025-01-19T00:00:00.000000"
     }
   },
   "categories": [
