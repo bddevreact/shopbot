@@ -93,6 +93,45 @@ LANGUAGES = {
         'order_yes': 'Order Yes',
         'order_paid': 'Order Paid',
         'cart_empty': 'Your cart is empty!',
+        
+        # Phrase verification
+        'invalid_phrase': 'Invalid Phrase Code',
+        'phrase_incorrect': 'The phrase code you entered is incorrect.',
+        'your_secret_phrase': 'Your secret phrase',
+        'note_enter_phrase': 'Note: Enter the phrase code (not your user ID above).',
+        'try_again_or_contact': 'Please try again with the correct phrase code, or contact admin if you don\'t have it.',
+        'secret_phrase_too_short': 'Secret Phrase Too Short',
+        'phrase_must_be_20_chars': 'Your secret phrase code must be at least 20 characters long.',
+        'current_length': 'Current length',
+        'characters': 'characters',
+        'required': 'Required',
+        'create_longer_phrase': 'Please create a longer secret phrase code and try again.',
+        'example': 'Example',
+        'secret_phrase_too_long': 'Secret Phrase Too Long',
+        'phrase_must_be_40_chars': 'Your secret phrase code must be 40 characters or less.',
+        'create_shorter_phrase': 'Please create a shorter secret phrase code and try again.',
+        'secret_phrase_set': 'Secret Phrase Set',
+        'phrase_saved_successfully': 'Your secret phrase code has been saved successfully.',
+        'phrase_instructions': 'You can now use this phrase code for future access.',
+        
+        # Discount and checkout
+        'discount_applied': 'Discount Applied Successfully!',
+        'code': 'Code',
+        'discount': 'Discount',
+        'amount_saved': 'Amount Saved',
+        'description': 'Description',
+        'cart_total': 'Cart Total',
+        'new_total': 'New Total',
+        'continue_order': 'Continue with your order!',
+        'back_to_checkout': 'Back to checkout',
+        'discount_error': 'Discount Error',
+        'try_again': 'Please try again.',
+        
+        # Address handling
+        'address_received': 'Address Received',
+        'address_confirmed': 'Your delivery address has been confirmed.',
+        'delivery_address': 'Delivery Address',
+        'select_delivery_method': 'Please select your delivery method.',
     },
     
     'GER': {
@@ -186,6 +225,45 @@ LANGUAGES = {
         'order_yes': 'Bestellung Ja',
         'order_paid': 'Bestellung bezahlt',
         'cart_empty': 'Ihr Warenkorb ist leer!',
+        
+        # Phrase verification
+        'invalid_phrase': 'Ungültiger Phrase-Code',
+        'phrase_incorrect': 'Der eingegebene Phrase-Code ist falsch.',
+        'your_secret_phrase': 'Ihr Geheimcode',
+        'note_enter_phrase': 'Hinweis: Geben Sie den Phrase-Code ein (nicht Ihre Benutzer-ID oben).',
+        'try_again_or_contact': 'Bitte versuchen Sie es erneut mit dem korrekten Phrase-Code oder kontaktieren Sie den Admin.',
+        'secret_phrase_too_short': 'Geheimcode zu kurz',
+        'phrase_must_be_20_chars': 'Ihr Geheimcode muss mindestens 20 Zeichen lang sein.',
+        'current_length': 'Aktuelle Länge',
+        'characters': 'Zeichen',
+        'required': 'Erforderlich',
+        'create_longer_phrase': 'Bitte erstellen Sie einen längeren Geheimcode und versuchen Sie es erneut.',
+        'example': 'Beispiel',
+        'secret_phrase_too_long': 'Geheimcode zu lang',
+        'phrase_must_be_40_chars': 'Ihr Geheimcode muss 40 Zeichen oder weniger haben.',
+        'create_shorter_phrase': 'Bitte erstellen Sie einen kürzeren Geheimcode und versuchen Sie es erneut.',
+        'secret_phrase_set': 'Geheimcode gesetzt',
+        'phrase_saved_successfully': 'Ihr Geheimcode wurde erfolgreich gespeichert.',
+        'phrase_instructions': 'Sie können diesen Phrase-Code für zukünftigen Zugang verwenden.',
+        
+        # Discount and checkout
+        'discount_applied': 'Rabatt erfolgreich angewendet!',
+        'code': 'Code',
+        'discount': 'Rabatt',
+        'amount_saved': 'Gesparte Summe',
+        'description': 'Beschreibung',
+        'cart_total': 'Warenkorb Gesamt',
+        'new_total': 'Neue Gesamtsumme',
+        'continue_order': 'Mit Ihrer Bestellung fortfahren!',
+        'back_to_checkout': 'Zurück zur Kasse',
+        'discount_error': 'Rabattfehler',
+        'try_again': 'Bitte versuchen Sie es erneut.',
+        
+        # Address handling
+        'address_received': 'Adresse erhalten',
+        'address_confirmed': 'Ihre Lieferadresse wurde bestätigt.',
+        'delivery_address': 'Lieferadresse',
+        'select_delivery_method': 'Bitte wählen Sie Ihre Liefermethode.',
     },
     
     'FR': {
@@ -279,6 +357,45 @@ LANGUAGES = {
         'order_yes': 'Commande Oui',
         'order_paid': 'Commande payée',
         'cart_empty': 'Votre panier est vide!',
+        
+        # Phrase verification
+        'invalid_phrase': 'Code Phrase Invalide',
+        'phrase_incorrect': 'Le code phrase que vous avez entré est incorrect.',
+        'your_secret_phrase': 'Votre phrase secrète',
+        'note_enter_phrase': 'Note: Entrez le code phrase (pas votre ID utilisateur ci-dessus).',
+        'try_again_or_contact': 'Veuillez réessayer avec le bon code phrase, ou contactez l\'admin si vous ne l\'avez pas.',
+        'secret_phrase_too_short': 'Phrase Secrète Trop Courte',
+        'phrase_must_be_20_chars': 'Votre code phrase secrète doit contenir au moins 20 caractères.',
+        'current_length': 'Longueur actuelle',
+        'characters': 'caractères',
+        'required': 'Requis',
+        'create_longer_phrase': 'Veuillez créer un code phrase secrète plus long et réessayer.',
+        'example': 'Exemple',
+        'secret_phrase_too_long': 'Phrase Secrète Trop Longue',
+        'phrase_must_be_40_chars': 'Votre code phrase secrète doit contenir 40 caractères ou moins.',
+        'create_shorter_phrase': 'Veuillez créer un code phrase secrète plus court et réessayer.',
+        'secret_phrase_set': 'Phrase Secrète Définie',
+        'phrase_saved_successfully': 'Votre code phrase secrète a été sauvegardé avec succès.',
+        'phrase_instructions': 'Vous pouvez maintenant utiliser ce code phrase pour un accès futur.',
+        
+        # Discount and checkout
+        'discount_applied': 'Réduction Appliquée avec Succès!',
+        'code': 'Code',
+        'discount': 'Réduction',
+        'amount_saved': 'Montant Économisé',
+        'description': 'Description',
+        'cart_total': 'Total du Panier',
+        'new_total': 'Nouveau Total',
+        'continue_order': 'Continuez avec votre commande!',
+        'back_to_checkout': 'Retour à la commande',
+        'discount_error': 'Erreur de Réduction',
+        'try_again': 'Veuillez réessayer.',
+        
+        # Address handling
+        'address_received': 'Adresse Reçue',
+        'address_confirmed': 'Votre adresse de livraison a été confirmée.',
+        'delivery_address': 'Adresse de Livraison',
+        'select_delivery_method': 'Veuillez sélectionner votre méthode de livraison.',
     },
     
     'NL': {
@@ -372,6 +489,45 @@ LANGUAGES = {
         'order_yes': 'Bestelling Ja',
         'order_paid': 'Bestelling betaald',
         'cart_empty': 'Uw winkelwagen is leeg!',
+        
+        # Phrase verification
+        'invalid_phrase': 'Ongeldige Phrase Code',
+        'phrase_incorrect': 'De phrase code die u heeft ingevoerd is onjuist.',
+        'your_secret_phrase': 'Uw geheime phrase',
+        'note_enter_phrase': 'Opmerking: Voer de phrase code in (niet uw gebruikers-ID hierboven).',
+        'try_again_or_contact': 'Probeer opnieuw met de juiste phrase code, of neem contact op met admin als u deze niet heeft.',
+        'secret_phrase_too_short': 'Geheime Phrase Te Kort',
+        'phrase_must_be_20_chars': 'Uw geheime phrase code moet minimaal 20 tekens lang zijn.',
+        'current_length': 'Huidige lengte',
+        'characters': 'tekens',
+        'required': 'Vereist',
+        'create_longer_phrase': 'Maak een langere geheime phrase code en probeer opnieuw.',
+        'example': 'Voorbeeld',
+        'secret_phrase_too_long': 'Geheime Phrase Te Lang',
+        'phrase_must_be_40_chars': 'Uw geheime phrase code moet 40 tekens of minder zijn.',
+        'create_shorter_phrase': 'Maak een kortere geheime phrase code en probeer opnieuw.',
+        'secret_phrase_set': 'Geheime Phrase Ingesteld',
+        'phrase_saved_successfully': 'Uw geheime phrase code is succesvol opgeslagen.',
+        'phrase_instructions': 'U kunt deze phrase code nu gebruiken voor toekomstige toegang.',
+        
+        # Discount and checkout
+        'discount_applied': 'Korting Succesvol Toegepast!',
+        'code': 'Code',
+        'discount': 'Korting',
+        'amount_saved': 'Bespaard Bedrag',
+        'description': 'Beschrijving',
+        'cart_total': 'Winkelwagen Totaal',
+        'new_total': 'Nieuw Totaal',
+        'continue_order': 'Ga door met uw bestelling!',
+        'back_to_checkout': 'Terug naar afrekenen',
+        'discount_error': 'Kortingsfout',
+        'try_again': 'Probeer opnieuw.',
+        
+        # Address handling
+        'address_received': 'Adres Ontvangen',
+        'address_confirmed': 'Uw bezorgadres is bevestigd.',
+        'delivery_address': 'Bezorgadres',
+        'select_delivery_method': 'Selecteer uw bezorgmethode.',
     }
 }
 

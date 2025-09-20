@@ -2212,99 +2212,6 @@ Please create a shorter secret phrase code and try again.
             bot.reply_to(message, welcome_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='HTML')
             return
         
-        # Handle phrase code submission (legacy - for global phrase codes)
-        elif user_id in user_states and user_states[user_id].get('waiting_for_phrase_code'):
-            phrase_code = text.upper().strip()
-            
-            # Get user data to check personal phrase code
-            user_data = get_user_by_id(user_id)
-            if not user_data:
-                user_data = get_or_create_user(user_id, message.from_user.username or "", 
-                                             message.from_user.first_name or "", 
-                                             message.from_user.last_name or "")
-            
-            # Check against personal phrase code or global phrase code
-            correct_phrase = None
-            if user_data.get('personal_phrase_code'):
-                correct_phrase = user_data['personal_phrase_code'].upper()
-            else:
-                correct_phrase = shop_info.get('phrase_code', '').upper()
-            
-            if phrase_code == correct_phrase:
-                # Phrase code is correct, verify user and show welcome
-                user_data = get_or_create_user(user_id, message.from_user.username or "", 
-                                             message.from_user.first_name or "", 
-                                             message.from_user.last_name or "")
-                
-                # Mark user as phrase verified
-                users_data = load_users()
-                for user in users_data['users']:
-                    if user['user_id'] == user_id:
-                        user['phrase_verified'] = True
-                        break
-                save_users(users_data)
-                
-                # Clear waiting state and set up user session
-                user_states[user_id] = {'country': None, 'pgp_state': None, 'pgp_challenge': None}
-                save_user_state(user_id, user_states[user_id])
-                
-                # Show welcome message with personal phrase code
-                personal_code = user_data.get('personal_phrase_code', 'Not set')
-                welcome_text = f"""
-🌍 {shop_info['name']} 📦 🌏 ✈️
-
-Currency: {shop_info['currency'].lower()}
-Payments: {' '.join(shop_info['payment_methods'])}
-
-👤 <b>Welcome, {message.from_user.first_name or 'User'}!</b>
-
-**Your secret phrase code:** {personal_code}
-
-Available countries:
-
-🇩🇪 GER - 🌍 WW
-
-🇦🇺 AUS - 🇦🇺 AUS
-
-🇺🇸 USA - 🇺🇸 USA
-
-The store owner Mr Worldwide
-Powered by The Engineer
-
-✨ {shop_info['promotion']} ✨
-"PLEASE READ 'Show About' BEFORE"
-
-✅ Premium quality &amp; best prices
-✅ Ninja packaging
-✅ Worldwide shipping
-
-📦 WE SHIP:
-[🇪🇺 EUROPE] [🇦🇺 AUS] [🇺🇸 USA]
-
-📞 Telegram for all latest updates
-{shop_info['contact']['telegram_bot']} &amp; {shop_info['contact']['updates_channel']}
-
-CEO {shop_info['contact']['ceo']}
-                """.strip()
-                
-                bot.reply_to(message, welcome_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='HTML')
-            else:
-                # Phrase code is incorrect
-                error_text = f"""
-❌ **Invalid Phrase Code**
-
-The phrase code you entered is incorrect.
-
-**Your secret phrase:** {user_id}
-
-**Note:** Enter the phrase code (not your user ID above).
-
-Please try again with the correct phrase code, or contact admin if you don't have it.
-                """.strip()
-                
-                bot.reply_to(message, error_text, parse_mode='Markdown')
-            return
-        
         # Handle discount code submission
         if user_id in user_states and user_states[user_id].get('waiting_for_discount_code'):
             # Process discount code
@@ -2484,3 +2391,250 @@ After sending, click "Payment Sent" to provide your delivery address.
                 finally:
                     user_states[user_id]['pgp_state'] = None
                     user_states[user_id]['pgp_challenge'] = None
+
+    # Add missing non-command message handler for phrase verification
+    @bot.message_handler(func=lambda message: message.text and not message.text.startswith('/') and not message.text.startswith('admin'))
+    def handle_non_command_message(message):
+        """Handle non-command messages like phrase codes"""
+        user_id = message.from_user.id
+        text = message.text.strip()
+        
+        # Check if user is waiting for address input - if so, skip phrase handling
+        if user_id in user_states and user_states[user_id].get('waiting_for_address'):
+            return  # Let the main handler deal with address input
+        
+        # Handle phrase code submission (for new users)
+        if user_id in user_states and user_states[user_id].get('waiting_for_phrase_code'):
+            phrase_code = text.upper().strip()
+            
+            # Get user data to check personal phrase code
+            user_data = get_user_by_id(user_id)
+            if not user_data:
+                user_data = get_or_create_user(user_id, message.from_user.username or "", 
+                                             message.from_user.first_name or "", 
+                                             message.from_user.last_name or "")
+            
+            # Check against personal phrase code or global phrase code
+            correct_phrase = None
+            if user_data.get('personal_phrase_code'):
+                correct_phrase = user_data['personal_phrase_code'].upper()
+            else:
+                correct_phrase = shop_info.get('phrase_code', '').upper()
+            
+            if phrase_code == correct_phrase:
+                # Phrase code is correct, verify user and show welcome
+                user_data = get_or_create_user(user_id, message.from_user.username or "", 
+                                             message.from_user.first_name or "", 
+                                             message.from_user.last_name or "")
+                
+                # Mark user as phrase verified
+                users_data = load_users()
+                for user in users_data['users']:
+                    if user['user_id'] == user_id:
+                        user['phrase_verified'] = True
+                        break
+                save_users(users_data)
+                
+                # Clear waiting state and set up user session
+                user_states[user_id] = {'country': None, 'pgp_state': None, 'pgp_challenge': None}
+                save_user_state(user_id, user_states[user_id])
+                
+                # Show welcome message with personal phrase code
+                personal_code = user_data.get('personal_phrase_code', 'Not set')
+                user_language = get_user_language(user_id)
+                welcome_text = f"""
+{get_text(user_language, 'welcome_title', shop_name=shop_info['name'])}
+{get_text(user_language, 'overall_rating')}
+
+{get_text(user_language, 'currency', currency=shop_info['currency'].lower())}
+{get_text(user_language, 'payments', payment_methods=' '.join(shop_info['payment_methods']))}
+
+{get_text(user_language, 'welcome_user', first_name=message.from_user.first_name or 'User')}
+
+{get_text(user_language, 'secret_phrase', phrase=personal_code)}
+
+{get_text(user_language, 'available_countries')}
+
+{get_text(user_language, 'country_ger')}
+
+{get_text(user_language, 'country_aus')}
+
+{get_text(user_language, 'country_usa')}
+
+{get_text(user_language, 'store_owner')}
+{get_text(user_language, 'powered_by')}
+
+{get_text(user_language, 'promotion', promotion_text=shop_info['promotion'])}
+{get_text(user_language, 'read_about')}
+
+{get_text(user_language, 'premium_quality')}
+{get_text(user_language, 'ninja_packaging')}
+{get_text(user_language, 'worldwide_shipping')}
+
+{get_text(user_language, 'we_ship')}
+{get_text(user_language, 'shipping_europe')} {get_text(user_language, 'shipping_aus')} {get_text(user_language, 'shipping_usa')}
+
+{get_text(user_language, 'telegram_updates')}
+{shop_info['contact']['telegram_bot']} &amp; {shop_info['contact']['updates_channel']}
+
+{get_text(user_language, 'ceo', ceo=shop_info['contact']['ceo'])}
+                """.strip()
+                
+                bot.reply_to(message, welcome_text, reply_markup=create_main_menu(user_id, user_carts, shop_info), parse_mode='HTML')
+            else:
+                # Phrase code is incorrect
+                user_language = get_user_language(user_id)
+                error_text = f"""
+❌ **{get_text(user_language, 'invalid_phrase')}**
+
+{get_text(user_language, 'phrase_incorrect')}
+
+**{get_text(user_language, 'your_secret_phrase')}:** {user_id}
+
+**{get_text(user_language, 'note_enter_phrase')}**
+
+{get_text(user_language, 'try_again_or_contact')}
+                """.strip()
+                
+                bot.reply_to(message, error_text, parse_mode='Markdown')
+            return
+        
+        # Handle user setting their own secret phrase code
+        if user_id in user_states and user_states[user_id].get('waiting_for_user_phrase_setup'):
+            secret_phrase = text.strip()
+            user_language = get_user_language(user_id)
+            
+            # Validate phrase code length (20-40 characters)
+            if len(secret_phrase) < 20:
+                error_text = f"""
+❌ **{get_text(user_language, 'secret_phrase_too_short')}**
+
+{get_text(user_language, 'phrase_must_be_20_chars')}
+
+**{get_text(user_language, 'current_length')}:** {len(secret_phrase)} {get_text(user_language, 'characters')}
+**{get_text(user_language, 'required')}:** 20-40 {get_text(user_language, 'characters')}
+
+{get_text(user_language, 'create_longer_phrase')}
+
+**{get_text(user_language, 'example')}:** `MySecretCode2024@ShopAccess#123`
+                """.strip()
+                
+                bot.reply_to(message, error_text, parse_mode='Markdown')
+                return
+            elif len(secret_phrase) > 40:
+                error_text = f"""
+❌ **{get_text(user_language, 'secret_phrase_too_long')}**
+
+{get_text(user_language, 'phrase_must_be_40_chars')}
+
+**{get_text(user_language, 'current_length')}:** {len(secret_phrase)} {get_text(user_language, 'characters')}
+**{get_text(user_language, 'required')}:** 20-40 {get_text(user_language, 'characters')}
+
+{get_text(user_language, 'create_shorter_phrase')}
+
+**{get_text(user_language, 'example')}:** `MySecretCode2024@ShopAccess#123`
+                """.strip()
+                
+                bot.reply_to(message, error_text, parse_mode='Markdown')
+                return
+            
+            # Save the user's secret phrase code
+            users_data = load_users()
+            for user in users_data['users']:
+                if user['user_id'] == user_id:
+                    user['personal_phrase_code'] = secret_phrase
+                    break
+            save_users(users_data)
+            
+            # Clear waiting state
+            user_states[user_id]['waiting_for_user_phrase_setup'] = False
+            save_user_state(user_id, user_states[user_id])
+            
+            # Show success message
+            success_text = f"""
+✅ **{get_text(user_language, 'secret_phrase_set')}**
+
+{get_text(user_language, 'phrase_saved_successfully')}
+
+**{get_text(user_language, 'your_secret_phrase')}:** `{secret_phrase}`
+
+{get_text(user_language, 'phrase_instructions')}
+            """.strip()
+            
+            bot.reply_to(message, success_text, parse_mode='Markdown')
+            return
+        
+        # Handle discount code submission
+        if user_id in user_states and user_states[user_id].get('waiting_for_discount_code'):
+            # Process discount code
+            discount_code = text.upper().strip()
+            cart_total = sum(item['price'] for item in user_carts.get(user_id, []))
+            user_language = get_user_language(user_id)
+            
+            discount_info, error_message = apply_discount_code(discount_code, shop_info, cart_total, categories)
+            
+            if discount_info:
+                # Store discount info in user state
+                user_states[user_id]['discount_code'] = discount_info
+                user_states[user_id]['waiting_for_discount_code'] = False
+                save_user_state(user_id, user_states[user_id])
+                
+                # Show success message with discount details
+                success_text = f"""
+✅ **{get_text(user_language, 'discount_applied')}**
+
+**{get_text(user_language, 'code')}:** {discount_info['code']}
+**{get_text(user_language, 'discount')}:** {discount_info['discount_percent']}% off
+**{get_text(user_language, 'amount_saved')}:** €{discount_info['discount_amount']:.2f}
+**{get_text(user_language, 'description')}:** {discount_info['description']}
+
+**{get_text(user_language, 'cart_total')}:** €{cart_total:.2f}
+**{get_text(user_language, 'discount')}:** -€{discount_info['discount_amount']:.2f}
+**{get_text(user_language, 'new_total')}:** €{cart_total - discount_info['discount_amount']:.2f}
+
+{get_text(user_language, 'continue_order')}
+                """.strip()
+                
+                markup = InlineKeyboardMarkup()
+                markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_checkout'), callback_data='checkout'))
+                bot.reply_to(message, success_text, reply_markup=markup, parse_mode='Markdown')
+            else:
+                # Show error message
+                error_text = f"""
+❌ **{get_text(user_language, 'discount_error')}**
+
+{error_message}
+
+{get_text(user_language, 'try_again')}
+                """.strip()
+                
+                markup = InlineKeyboardMarkup()
+                markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_checkout'), callback_data='checkout'))
+                bot.reply_to(message, error_text, reply_markup=markup, parse_mode='Markdown')
+            return
+        
+        # Handle address input
+        if user_id in user_states and user_states[user_id].get('waiting_for_address'):
+            # Store the address
+            user_states[user_id]['delivery_address'] = text
+            user_states[user_id]['waiting_for_address'] = False
+            save_user_state(user_id, user_states[user_id])
+            
+            user_language = get_user_language(user_id)
+            # Show confirmation and proceed to delivery selection
+            confirmation_text = f"""
+✅ **{get_text(user_language, 'address_received')}**
+
+{get_text(user_language, 'address_confirmed')}
+
+**{get_text(user_language, 'delivery_address')}:**
+{text}
+
+{get_text(user_language, 'select_delivery_method')}
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton(get_text(user_language, 'select_delivery'), callback_data='select_delivery'))
+            markup.add(InlineKeyboardButton(get_text(user_language, 'back_to_checkout'), callback_data='checkout'))
+            bot.reply_to(message, confirmation_text, reply_markup=markup, parse_mode='Markdown')
+            return
