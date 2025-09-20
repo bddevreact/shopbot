@@ -132,6 +132,28 @@ LANGUAGES = {
         'address_confirmed': 'Your delivery address has been confirmed.',
         'delivery_address': 'Delivery Address',
         'select_delivery_method': 'Please select your delivery method.',
+        
+        # Settings and Notifications
+        'notification_settings': 'Notification Settings',
+        'notification_options': 'Notification Options',
+        'current_settings': 'Current Settings',
+        'notification_note': 'You can customize your notification preferences here.',
+        'language_settings': 'Language Settings',
+        'current_language': 'Current Language',
+        'language_note': 'Select your preferred language for the bot interface.',
+        
+        # Notification handlers
+        'email_notifications': 'Email Notifications',
+        'email_settings': 'Email Settings',
+        'current_status': 'Current Status',
+        'email_note': 'Manage your email notification preferences.',
+        'push_notifications': 'Push Notifications',
+        'push_settings': 'Push Settings',
+        'push_note': 'Manage your push notification preferences.',
+        'disable_all_notifications': 'Disable All Notifications',
+        'disable_warning': 'Warning:',
+        'disable_confirm': 'Are you sure you want to disable all notifications?',
+        'disable_note': 'You can re-enable notifications anytime from settings.',
     },
     
     'GER': {
@@ -264,6 +286,28 @@ LANGUAGES = {
         'address_confirmed': 'Ihre Lieferadresse wurde bestätigt.',
         'delivery_address': 'Lieferadresse',
         'select_delivery_method': 'Bitte wählen Sie Ihre Liefermethode.',
+        
+        # Settings and Notifications
+        'notification_settings': 'Benachrichtigungseinstellungen',
+        'notification_options': 'Benachrichtigungsoptionen',
+        'current_settings': 'Aktuelle Einstellungen',
+        'notification_note': 'Sie können Ihre Benachrichtigungseinstellungen hier anpassen.',
+        'language_settings': 'Spracheinstellungen',
+        'current_language': 'Aktuelle Sprache',
+        'language_note': 'Wählen Sie Ihre bevorzugte Sprache für die Bot-Oberfläche.',
+        
+        # Notification handlers
+        'email_notifications': 'E-Mail-Benachrichtigungen',
+        'email_settings': 'E-Mail-Einstellungen',
+        'current_status': 'Aktueller Status',
+        'email_note': 'Verwalten Sie Ihre E-Mail-Benachrichtigungseinstellungen.',
+        'push_notifications': 'Push-Benachrichtigungen',
+        'push_settings': 'Push-Einstellungen',
+        'push_note': 'Verwalten Sie Ihre Push-Benachrichtigungseinstellungen.',
+        'disable_all_notifications': 'Alle Benachrichtigungen deaktivieren',
+        'disable_warning': 'Warnung:',
+        'disable_confirm': 'Sind Sie sicher, dass Sie alle Benachrichtigungen deaktivieren möchten?',
+        'disable_note': 'Sie können Benachrichtigungen jederzeit in den Einstellungen wieder aktivieren.',
     },
     
     'FR': {
@@ -396,6 +440,28 @@ LANGUAGES = {
         'address_confirmed': 'Votre adresse de livraison a été confirmée.',
         'delivery_address': 'Adresse de Livraison',
         'select_delivery_method': 'Veuillez sélectionner votre méthode de livraison.',
+        
+        # Settings and Notifications
+        'notification_settings': 'Paramètres de Notification',
+        'notification_options': 'Options de Notification',
+        'current_settings': 'Paramètres Actuels',
+        'notification_note': 'Vous pouvez personnaliser vos préférences de notification ici.',
+        'language_settings': 'Paramètres de Langue',
+        'current_language': 'Langue Actuelle',
+        'language_note': 'Sélectionnez votre langue préférée pour l\'interface du bot.',
+        
+        # Notification handlers
+        'email_notifications': 'Notifications Email',
+        'email_settings': 'Paramètres Email',
+        'current_status': 'Statut Actuel',
+        'email_note': 'Gérez vos préférences de notification par email.',
+        'push_notifications': 'Notifications Push',
+        'push_settings': 'Paramètres Push',
+        'push_note': 'Gérez vos préférences de notification push.',
+        'disable_all_notifications': 'Désactiver Toutes les Notifications',
+        'disable_warning': 'Avertissement:',
+        'disable_confirm': 'Êtes-vous sûr de vouloir désactiver toutes les notifications?',
+        'disable_note': 'Vous pouvez réactiver les notifications à tout moment dans les paramètres.',
     },
     
     'NL': {
@@ -528,6 +594,28 @@ LANGUAGES = {
         'address_confirmed': 'Uw bezorgadres is bevestigd.',
         'delivery_address': 'Bezorgadres',
         'select_delivery_method': 'Selecteer uw bezorgmethode.',
+        
+        # Settings and Notifications
+        'notification_settings': 'Meldingen Instellingen',
+        'notification_options': 'Meldingen Opties',
+        'current_settings': 'Huidige Instellingen',
+        'notification_note': 'U kunt uw meldingsvoorkeuren hier aanpassen.',
+        'language_settings': 'Taal Instellingen',
+        'current_language': 'Huidige Taal',
+        'language_note': 'Selecteer uw voorkeurstaal voor de bot-interface.',
+        
+        # Notification handlers
+        'email_notifications': 'E-mail Meldingen',
+        'email_settings': 'E-mail Instellingen',
+        'current_status': 'Huidige Status',
+        'email_note': 'Beheer uw e-mail meldingsvoorkeuren.',
+        'push_notifications': 'Push Meldingen',
+        'push_settings': 'Push Instellingen',
+        'push_note': 'Beheer uw push meldingsvoorkeuren.',
+        'disable_all_notifications': 'Alle Meldingen Uitschakelen',
+        'disable_warning': 'Waarschuwing:',
+        'disable_confirm': 'Weet u zeker dat u alle meldingen wilt uitschakelen?',
+        'disable_note': 'U kunt meldingen op elk moment opnieuw inschakelen in de instellingen.',
     }
 }
 

@@ -718,7 +718,7 @@ Just type your secret phrase code and send it to this chat.
             
             bot.send_message(message.chat.id, phrase_text, parse_mode='Markdown')
 
-    @bot.callback_query_handler(func=lambda call: call.data in ['products', 'about', 'pgp', 'cart', 'orders', 'updates', 'back', 'checkout', 'payment_sent', 'order_no', 'order_yes', 'order_confirm', 'order_cancel', 'order_paid', 'discount_code', 'select_payment', 'enter_address', 'select_delivery', 'delete_order', 'tracking_info', 'restart_session', 'support_menu', 'recommendations_menu', 'user_dashboard', 'advanced_search', 'wishlist', 'order_history', 'user_settings', 'security_settings', 'user_analytics', 'user_preferences', 'search_products', 'search_by_category', 'search_by_price', 'search_sort', 'search_trending', 'search_new', 'price_alerts', 'share_wishlist', 'show_rating', 'language_selection'] or 
+    @bot.callback_query_handler(func=lambda call: call.data in ['products', 'about', 'pgp', 'cart', 'orders', 'updates', 'back', 'checkout', 'payment_sent', 'order_no', 'order_yes', 'order_confirm', 'order_cancel', 'order_paid', 'discount_code', 'select_payment', 'enter_address', 'select_delivery', 'delete_order', 'tracking_info', 'restart_session', 'support_menu', 'recommendations_menu', 'user_dashboard', 'advanced_search', 'wishlist', 'order_history', 'user_settings', 'security_settings', 'user_analytics', 'user_preferences', 'search_products', 'search_by_category', 'search_by_price', 'search_sort', 'search_trending', 'search_new', 'price_alerts', 'share_wishlist', 'show_rating', 'language_selection', 'notification_settings', 'language_settings', 'email_notifications', 'push_notifications', 'disable_notifications'] or 
                                 call.data.startswith('country_') or call.data.startswith('category_') or 
                                 call.data.startswith('add_') or call.data.startswith('remove_') or 
                                 call.data.startswith('test_verify_') or call.data.startswith('qty_') or
@@ -1651,6 +1651,130 @@ Start shopping to see your order history here!
             markup.add(InlineKeyboardButton('🔙 Back to Dashboard', callback_data='user_dashboard'))
             
             safe_edit_message(bot, call.message.chat.id, call.message.message_id, preferences_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'notification_settings':
+            user_language = get_user_language(user_id)
+            notification_text = f"""
+🔔 **{get_text(user_language, 'notification_settings')}**
+
+**{get_text(user_language, 'notification_options')}:**
+• Order updates
+• New product alerts
+• Promotional offers
+• Security notifications
+• System announcements
+
+**{get_text(user_language, 'current_settings')}:**
+• Order notifications: ✅ Enabled
+• Product alerts: ✅ Enabled
+• Promotions: ✅ Enabled
+• Security: ✅ Enabled
+
+{get_text(user_language, 'notification_note')}
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('📧 Email Notifications', callback_data='email_notifications'))
+            markup.add(InlineKeyboardButton('📱 Push Notifications', callback_data='push_notifications'))
+            markup.add(InlineKeyboardButton('🔕 Disable All', callback_data='disable_notifications'))
+            markup.add(InlineKeyboardButton('🔙 Back to Settings', callback_data='user_settings'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, notification_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'language_settings':
+            user_language = get_user_language(user_id)
+            language_text = f"""
+🌐 **{get_text(user_language, 'language_settings')}**
+
+**{get_text(user_language, 'current_language')}:** {get_text(user_language, 'name')} {get_text(user_language, 'flag')}
+
+**{get_text(user_language, 'available_languages')}:**
+• 🇬🇧 English (EN)
+• 🇩🇪 Deutsch (GER)
+• 🇫🇷 Français (FR)
+• 🇳🇱 Nederlands (NL)
+
+{get_text(user_language, 'language_note')}
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('🇬🇧 English', callback_data='lang_EN'))
+            markup.add(InlineKeyboardButton('🇩🇪 Deutsch', callback_data='lang_GER'))
+            markup.add(InlineKeyboardButton('🇫🇷 Français', callback_data='lang_FR'))
+            markup.add(InlineKeyboardButton('🇳🇱 Nederlands', callback_data='lang_NL'))
+            markup.add(InlineKeyboardButton('🔙 Back to Settings', callback_data='user_settings'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, language_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'email_notifications':
+            user_language = get_user_language(user_id)
+            email_text = f"""
+📧 **{get_text(user_language, 'email_notifications')}**
+
+**{get_text(user_language, 'email_settings')}:**
+• Order confirmations
+• Shipping updates
+• Payment receipts
+• Account security alerts
+• Promotional offers
+
+**{get_text(user_language, 'current_status')}:** ✅ Enabled
+
+{get_text(user_language, 'email_note')}
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('✅ Enable Email', callback_data='enable_email'))
+            markup.add(InlineKeyboardButton('❌ Disable Email', callback_data='disable_email'))
+            markup.add(InlineKeyboardButton('🔙 Back to Notifications', callback_data='notification_settings'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, email_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'push_notifications':
+            user_language = get_user_language(user_id)
+            push_text = f"""
+📱 **{get_text(user_language, 'push_notifications')}**
+
+**{get_text(user_language, 'push_settings')}:**
+• Real-time order updates
+• New product alerts
+• Price drop notifications
+• Security alerts
+• System messages
+
+**{get_text(user_language, 'current_status')}:** ✅ Enabled
+
+{get_text(user_language, 'push_note')}
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('✅ Enable Push', callback_data='enable_push'))
+            markup.add(InlineKeyboardButton('❌ Disable Push', callback_data='disable_push'))
+            markup.add(InlineKeyboardButton('🔙 Back to Notifications', callback_data='notification_settings'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, push_text, reply_markup=markup, parse_mode='Markdown')
+        
+        elif call.data == 'disable_notifications':
+            user_language = get_user_language(user_id)
+            disable_text = f"""
+🔕 **{get_text(user_language, 'disable_all_notifications')}**
+
+**{get_text(user_language, 'disable_warning')}:**
+• You will not receive any notifications
+• Order updates will be missed
+• Security alerts will be disabled
+• Promotional offers will be hidden
+
+**{get_text(user_language, 'disable_confirm')}**
+
+{get_text(user_language, 'disable_note')}
+            """.strip()
+            
+            markup = InlineKeyboardMarkup()
+            markup.add(InlineKeyboardButton('✅ Yes, Disable All', callback_data='confirm_disable'))
+            markup.add(InlineKeyboardButton('❌ Cancel', callback_data='notification_settings'))
+            
+            safe_edit_message(bot, call.message.chat.id, call.message.message_id, disable_text, reply_markup=markup, parse_mode='Markdown')
         
         # Search features
         elif call.data == 'search_products':
